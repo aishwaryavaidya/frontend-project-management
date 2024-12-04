@@ -1,0 +1,7 @@
+/* src/ProjectTable.css */
+
+/* Add a subtle background color to the pinned column */
+.ag-theme-alpine .ag-pinned-left-cols-container .ag-cell {
+    background-color: #f0f0f0; /* Light grey background */
+  }
+  
