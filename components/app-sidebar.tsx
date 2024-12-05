@@ -2,16 +2,17 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
+  BellDotIcon,
+  Briefcase,
   BookOpen,
   Bot,
   Command,
   Frame,
-  GalleryVerticalEnd,
+  NotebookPen,
   Map,
   PieChart,
   Settings2,
-  SquareTerminal,
+  HomeIcon,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -29,63 +30,81 @@ import {
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Viswajeet",
+    email: "viswajeet@gmail.com",
     avatar: "/avatars/shadcn.jpg",
   },
   teams: [
     {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      name: "autoplant",
+      logo: NotebookPen,
+      plan: "Project Manager 24x7",
     },
     {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
+      name: "Admin",
       logo: Command,
       plan: "Free",
     },
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
+      title: "Home",
+      url: "/dashboard/home",
+      icon: HomeIcon,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Summary",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "My Task",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "Task Calendar",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "Portfolio",
       url: "#",
-      icon: Bot,
+      icon: Briefcase,
       items: [
         {
-          title: "Genesis",
+          title: "Customer Site",
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "Project Templates",
           url: "#",
         },
         {
-          title: "Quantum",
+          title: "Supersonic plan",
+          url: "#",
+        },
+        {
+          title: "Kanban View",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Notifications",
+      url: "#",
+      icon: BellDotIcon,
+      items: [
+        {
+          title: "Personal",
+          url: "#",
+        },
+        {
+          title: "Go-live",
+          url: "#",
+        },
+        {
+          title: "Others",
           url: "#",
         },
       ],
@@ -96,11 +115,11 @@ const data = {
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Saved Docs",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Upload New",
           url: "#",
         },
         {
