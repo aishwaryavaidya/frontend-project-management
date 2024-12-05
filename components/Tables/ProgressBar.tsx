@@ -7,9 +7,9 @@ interface ProgressBarProps {
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ value }) => {
   return (
-    <div className="relative w-full bg-gray-300 dark:bg-gray-700 rounded-full h-6 overflow-hidden">
+    <div className="relative w-full bg-gray-300 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
       <div
-        className={`h-6 rounded-full transition-all duration-300 ease-in-out ${
+        className={`h-4 rounded-full transition-all duration-300 ease-in-out ${
           value >= 100 ? "rounded-full" : "rounded-l-full" // Keep the left side rounded
         }`}
         style={{
