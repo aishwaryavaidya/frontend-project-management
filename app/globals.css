@@ -76,7 +76,14 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  .green-cell{background-color: rgb(123, 252, 123); color: white}
+  .red-cell{background-color: rgba(248, 95, 95, 0.534); color: white}
+  .red-row{background-color: rgba(255, 0, 0, 0.2);}
+  
 }
+
+
 
 @layer base {
   * {
