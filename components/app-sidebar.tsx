@@ -43,50 +43,50 @@ const data = {
     {
       name: "Admin",
       logo: Command,
-      plan: "Free",
+      plan: "Private access",
     },
   ],
   navMain: [
     {
       title: "Home",
-      url: "/dashboard/home",
+      url: "/dashboard/home/summary",
       icon: HomeIcon,
       isActive: true,
       items: [
         {
           title: "Summary",
-          url: "#",
+          url: "/dashboard/home/summary",
         },
         {
           title: "My Task",
-          url: "#",
+          url: "/dashboard/home/my-task",
         },
         {
           title: "Task Calendar",
-          url: "#",
+          url: "/dashboard/home/task-calendar",
+        },
+        {
+          title: "Kanban View",
+          url: "/dashboard/home/kanban",
         },
       ],
     },
     {
       title: "Portfolio",
-      url: "#",
+      url: "/dashboard/portfolio/customer-site",
       icon: Briefcase,
       items: [
         {
           title: "Customer Site",
-          url: "#",
+          url: "/dashboard/portfolio/customer-site",
         },
         {
           title: "Project Templates",
-          url: "#",
+          url: "/dashboard/project-templates",
         },
         {
           title: "Supersonic plan",
-          url: "#",
-        },
-        {
-          title: "Kanban View",
-          url: "#",
+          url: "/dashboard/portfolio/supersonic-plan",
         },
       ],
     },

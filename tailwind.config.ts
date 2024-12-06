@@ -75,9 +75,15 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate"),
-	addVariablesForColors,],
+  plugins: [require("tailwindcss-animate"),addVariablesForColors,require("daisyui"),],
+  daisyui: {
+	themes: ["light", "dark"], // Add dark mode support
+  },
+
+	
+	
 } satisfies Config;
+
 
 function addVariablesForColors({ addBase, theme }: any) {
 	let allColors = flattenColorPalette(theme("colors"));

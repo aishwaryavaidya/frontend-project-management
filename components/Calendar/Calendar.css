@@ -1,0 +1,55 @@
+/* Tailwind and DaisyUI customizations for FullCalendar */
+
+/* General Scroll Grid */
+.fc-scrollgrid {
+    border: 1px solid var(--tw-border-opacity);
+  }
+
+  
+  /* Column Header Cell */
+  .fc-col-header-cell {
+    background-color: var(--tw-bg-opacity) !important;
+    color: var(--tw-text-opacity) !important;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  /* Event statuses */
+  .event-not-started {
+    background-color: #ef4444 !important; /* Red */
+    color: black !important;
+  }
+  
+  .event-in-progress {
+    background-color: #facc15 !important; /* Yellow */
+    color: black ;
+  }
+  
+  .event-completed {
+    background-color: #22c55e !important; /* Green */
+    color: white !important;
+  }
+  
+  /* Tooltip for tasks */
+  .custom-tooltip {
+    position: absolute;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 9999;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: 1px solid #444;
+  }
+  
+  
+  /* Legend styles */
+  .legend-box {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
