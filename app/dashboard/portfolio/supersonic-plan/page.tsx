@@ -1,9 +1,10 @@
+import ProjectTable from '@/components/Tables/ProjectTable'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      Heyy
+      <ProjectTable/>
     </div>
   )
 }

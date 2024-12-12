@@ -242,7 +242,7 @@ const rowData: Record<string, RowData[]> = {
         <div key={customer} className="mb-8">
           <h2 className="text-xl font-semibold mb-2">{customer} Projects</h2>
           
-          <div className={mode ? "ag-theme-material" : "ag-theme-material-dark"}>
+          <div className={mode ? "ag-theme-material" : "ag-theme-alpine-dark"}>
             <AgGridReact
               rowData={rowData[customer]}
               columnDefs={columnDefs}

@@ -8,6 +8,8 @@ import { useState } from 'react';
 import { Modal, Input, DatePicker, Select, Button } from 'antd';
 import dayjs from 'dayjs';
 
+
+
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
@@ -28,6 +30,7 @@ interface ColumnDef {
   sortable?: boolean;
   filter?: boolean | string;
   pinned?: 'left' | 'right';
+  flex: number;
 }
 
 export default function ProjectTable() {
@@ -37,14 +40,14 @@ export default function ProjectTable() {
     { index: 3, taskName: 'Testing', startDate: '2024-12-16', endDate: '2024-12-30', assignedTo: '', dependency: 2 },
   ];
 
-  const [rowData, setRowData] = useState<RowData[]>(initialData);
+  const [rowData, setRowData] = useState<RowData[]>(initialData); 
   const [columnDefs, setColumnDefs] = useState<ColumnDef[]>([
-    { headerName: 'Index', field: 'index', pinned: 'left', editable: false },
-    { headerName: 'Task Name', field: 'taskName', pinned: 'left', editable: true, sortable: true, filter: true },
-    { headerName: 'Start Date', field: 'startDate', editable: true, sortable: true, filter: 'agDateColumnFilter' },
-    { headerName: 'End Date', field: 'endDate', editable: true, sortable: true, filter: 'agDateColumnFilter' },
-    { headerName: 'Assigned To', field: 'assignedTo', editable: false },
-    { headerName: 'Dependency', field: 'dependency', editable: true, sortable: true, filter: true },
+    { headerName: 'Index', field: 'index', pinned: 'left', editable: false, flex: 0.5, },
+    { headerName: 'Task Name', field: 'taskName', pinned: 'left', editable: true, sortable: true, filter: true, flex: 2 },
+    { headerName: 'Start Date', field: 'startDate', editable: true, sortable: true, filter: 'agDateColumnFilter', flex:1.5 },
+    { headerName: 'End Date', field: 'endDate', editable: true, sortable: true, filter: 'agDateColumnFilter', flex:1.5 },
+    { headerName: 'Assigned To', field: 'assignedTo', editable: false, flex: 2 },
+    { headerName: 'Dependency', field: 'dependency', editable: true, sortable: true, filter: true, flex: 1 },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);

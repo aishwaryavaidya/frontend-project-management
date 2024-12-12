@@ -37,7 +37,7 @@ export default async function Home() {
           <p className="mt-6 text-lg leading-8 text-gray-600 mb-4">
           99% of businesses have massive blind spots in their End-to-End Logistics Chain. Autoplants Logistics Excellence Platform rectifies that.
           </p>
-          <CustomLinkButton title="Go to Dashboard" href="/dashboard/portfolio/customer-site" />
+          <CustomLinkButton title="Go to Dashboard" href="/dashboard/home/summary" />
           <div className="pt-8 pb-4 flex items-center  justify-center gap-8">
             <div className="">
               <AnimatedAvatars />
