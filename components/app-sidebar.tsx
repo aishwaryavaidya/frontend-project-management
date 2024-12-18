@@ -5,7 +5,7 @@ import {
   BellDotIcon,
   Briefcase,
   BookOpen,
-  Bot,
+  ActivityIcon,
   Command,
   Frame,
   NotebookPen,
@@ -47,6 +47,28 @@ const data = {
     },
   ],
   navMain: [
+
+
+    {
+      title: "Dashboard",
+      url: "/dashboard/summary",
+      icon: ActivityIcon,
+      // items: [
+      //   {
+      //     title: "Customer Site",
+      //     url: "/dashboard/portfolio/customer-site",
+      //   },
+      //   {
+      //     title: "Project Templates",
+      //     url: "/dashboard/project-templates",
+      //   },
+      //   {
+      //     title: "Supersonic plan",
+      //     url: "/dashboard/portfolio/supersonic-pla#",
+      //   },
+      // ],
+    },
+
     {
       title: "Home",
       url: "/dashboard/home/summary",
