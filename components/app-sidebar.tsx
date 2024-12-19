@@ -53,20 +53,28 @@ const data = {
       title: "Dashboard",
       url: "/dashboard/summary",
       icon: ActivityIcon,
-      // items: [
-      //   {
-      //     title: "Customer Site",
-      //     url: "/dashboard/portfolio/customer-site",
-      //   },
-      //   {
-      //     title: "Project Templates",
-      //     url: "/dashboard/project-templates",
-      //   },
-      //   {
-      //     title: "Supersonic plan",
-      //     url: "/dashboard/portfolio/supersonic-pla#",
-      //   },
-      // ],
+      items: [
+        {
+          title: "Project Overview",
+          url: "/dashboard/portfolio/customer-site",
+        },
+        {
+          title: "Project Plan",
+          url: "/dashboard/project-templates",
+        },
+        {
+          title: "Project resource",
+          url: "/dashboard/portfolio/supersonic-pla#",
+        },
+        {
+          title: "RAID",
+          url: "/dashboard/portfolio/supersonic-pla#",
+        },
+        {
+          title: "RYG",
+          url: "/dashboard/portfolio/supersonic-pla#",
+        },
+      ],
     },
 
     {
