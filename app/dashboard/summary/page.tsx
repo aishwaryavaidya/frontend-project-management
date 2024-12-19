@@ -54,7 +54,7 @@ const page = () => {
     </div>
 
   <div>
-    <div className="flex justify-between pl-2 w-full bg-white rounded-lg p-1 dark:bg-black border-b " style={{height: "360px"}}>
+    <div className="flex justify-between pl-2 w-full bg-white rounded-lg p-1 dark:bg-black border-b " style={{height: "370px"}}>
             <div className="flex"> <SummaryTable /> </div>
             <div className="flex w-full h-80 mt-2 ml-2.5"> <UpscrollingFeed/> </div>
     </div>

@@ -51,28 +51,28 @@ const data = {
 
     {
       title: "Dashboard",
-      url: "/dashboard/summary",
+      url: "#",
       icon: ActivityIcon,
       items: [
         {
           title: "Project Overview",
-          url: "/dashboard/portfolio/customer-site",
+          url: "dashboard/project/overview",
         },
         {
           title: "Project Plan",
-          url: "/dashboard/project-templates",
+          url: "project/plan",
         },
         {
           title: "Project resource",
-          url: "/dashboard/portfolio/supersonic-pla#",
+          url: "project/resource",
         },
         {
           title: "RAID",
-          url: "/dashboard/portfolio/supersonic-pla#",
+          url: "dashboard/project/RAID",
         },
         {
           title: "RYG",
-          url: "/dashboard/portfolio/supersonic-pla#",
+          url: "/project/RYG",
         },
       ],
     },
