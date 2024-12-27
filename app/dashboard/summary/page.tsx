@@ -42,7 +42,7 @@ const page = () => {
   
     </div>
       <div className="flex-1">
-      <Marquee speed={80}>
+      <Marquee speed={50}>
         <span className="text-white text-xs font-semibold space-x-4">
           Congratulations!!! Go Live for project XYZ successfully done by Project Manager on 25th Jan 2025
         </span>

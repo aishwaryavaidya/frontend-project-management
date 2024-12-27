@@ -1,9 +1,10 @@
 import React from 'react'
+import ProjectGanttChart from './ProjectGanttChart'
 
 const page = () => {
   return (
     <div>
-      Heyy
+      <ProjectGanttChart/>
     </div>
   )
 }

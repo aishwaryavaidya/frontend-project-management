@@ -3,28 +3,30 @@ import React, { useState } from "react";
 import Marquee from "react-fast-marquee";
 
 const data = [
-  { customer: "ABG Fiber", site: "Texas", projCode: "P123fjbhsdsbckhsdbckbsdhcbhsdbcjhefknwebf", projName: "Warehouse", status: "Delayed", progress: 40, pm: "John Doe", delay: 10, goLive: "2025-01-10", ryg: false },
-  { customer: "XYZ Ltd.", site: "California", projCode: "P456scbhskdjcbksjb", projName: "Bridge", status: "On Track", progress: 80, pm: "Jane Smith", delay: 0, goLive: "2024-12-20", ryg: true },
-  { customer: "ABG Fiber", site: "Nevada", projCode: "P789sdkjbsajb", projName: "Plant", status: "On Track", progress: 60, pm: "Alice Lee", delay: 5, goLive: "2024-11-15", ryg: false },
-  { customer: "ABC Logistics", site: "New York", projCode: "P321kjsdbhqsbcd", projName: "Transport Hub", status: "Delayed", progress: 30, pm: "Robert Green", delay: 15, goLive: "2025-02-01", ryg: true },
-  { customer: "ABG Fiber", site: "Texas", projCode: "P123", projName: "Warehouse", status: "Delayed", progress: 40, pm: "John Doe", delay: 10, goLive: "2025-01-10", ryg: false },
-  { customer: "XYZ Ltd.", site: "California", projCode: "P456", projName: "Bridge", status: "On Track", progress: 80, pm: "Jane Smith", delay: 0, goLive: "2024-12-20", ryg: true },
-  { customer: "ABG Fiber", site: "Nevada", projCode: "P789", projName: "Plant", status: "On Track", progress: 60, pm: "Alice Lee", delay: 5, goLive: "2024-11-15", ryg: false },
-  { customer: "ABC Logistics", site: "New York", projCode: "P321", projName: "Transport Hub", status: "Delayed", progress: 30, pm: "Robert Green", delay: 15, goLive: "2025-02-01", ryg: true },
-  { customer: "ABG Fiber", site: "Texas", projCode: "P123", projName: "Warehouse", status: "Delayed", progress: 40, pm: "John Doe", delay: 10, goLive: "2025-01-10", ryg: false },
-  { customer: "XYZ Ltd.", site: "California", projCode: "P456", projName: "Bridge", status: "On Track", progress: 80, pm: "Jane Smith", delay: 0, goLive: "2024-12-20", ryg: true },
-  { customer: "ABG Fiber", site: "Nevada", projCode: "P789", projName: "Plant", status: "On Track", progress: 60, pm: "Alice Lee", delay: 5, goLive: "2024-11-15", ryg: false },
-  { customer: "ABC Logistics", site: "New York", projCode: "P321", projName: "Transport Hub", status: "Delayed", progress: 30, pm: "Robert Green", delay: 15, goLive: "2025-02-01", ryg: true },
-  { customer: "ABG Fiber", site: "Texas", projCode: "P123", projName: "Warehouse", status: "Delayed", progress: 40, pm: "John Doe", delay: 10, goLive: "2025-01-10", ryg: false },
-  { customer: "XYZ Ltd.", site: "California", projCode: "P456", projName: "Bridge", status: "On Track", progress: 80, pm: "Jane Smith", delay: 0, goLive: "2024-12-20", ryg: true },
-  { customer: "ABG Fiber", site: "Nevada", projCode: "P789", projName: "Plant", status: "On Track", progress: 60, pm: "Alice Lee", delay: 5, goLive: "2024-11-15", ryg: false },
-  { customer: "ABC Logistics", site: "New York", projCode: "P321", projName: "Transport Hub", status: "Delayed", progress: 30, pm: "Robert Green", delay: 15, goLive: "2025-02-01", ryg: true },
+  { customer: "ABG ", type: "Fibres", site: "Vilayat", projCode: "P123fjbhsds", ProdName: "VC", currentphase: "Support", status: "Delayed", progress: 40, pm: "John Doe", spoc:"Saurabh Naik", delay: 10, goLive: "2025-01-10", ryg: 0 },
+  { customer: "VICAT", type: "Cement", site: "California", projCode: "P456scb", ProdName: "Inplant",currentphase: "In Dev", status: "On Track", progress: 80, pm: "Jane Smith", spoc:"Alok Pandey", delay: 0, goLive: "2024-12-20", ryg: 0 },
+  { customer: "ABG", type: "Cement", site: "Nevada", projCode: "P789sdkj", ProdName: "VC",currentphase: "UAT", status: "On Track", progress: 60, pm: "Alice Lee", spoc:"Alok Pandey", delay: 5, goLive: "2024-11-15", ryg: 1 },
+  { customer: "SCL", type: "Cement", site: "New York", projCode: "P321kjsdbhqsbcd", ProdName: "Epod",currentphase: "Dev", status: "Delayed", progress: 30, pm: "Robert Green", spoc:"Saurabh Naik", delay: 15, goLive: "2025-02-01", ryg: 2 },
+  { customer: "DCM", type: "Chemicals", site: "Texas", projCode: "P123", ProdName: "Inplant",currentphase: "Completed", status: "Delayed", progress: 40, pm: "John Doe", spoc:"Mayur Balsane", delay: 10, goLive: "2025-01-10", ryg: 0 },
+  { customer: "DPF", type: "Chemicals", site: "California", projCode: "P456", ProdName: "Smartloading",currentphase: "Go-live", status: "On Track", progress: 80, pm: "Jane Smith", spoc:"Mayur Balsane", delay: 0, goLive: "2024-12-20", ryg: 1 },
+  { customer: "UTCL", type: "Cement", site: "Nevada", projCode: "P789", ProdName: "Enroute",currentphase: "H/W Infra", status: "On Track", progress: 60, pm: "Alice Lee", spoc:"Amar", delay: 5, goLive: "2024-11-15", ryg: 0 },
+  { customer: "JK", type: "Cement", site: "New York", projCode: "P321", ProdName: "Inplant",currentphase: "In Dev", status: "Delayed", progress: 30, pm: "Robert Green", spoc:"Sagar", delay: 15, goLive: "2025-02-01", ryg: 2 },
+  { customer: "JK", type: "Cement", site: "Texas", projCode: "P123", ProdName: "Enroute",currentphase: "Design", status: "Delayed", progress: 40, pm: "John Doe", spoc:"Viswajeet", delay: 10, goLive: "2025-01-10", ryg: 1 },
+  { customer: "JSW", type: "Cement", site: "California", projCode: "P456", ProdName: "Epod",currentphase: "UAT", status: "On Track", progress: 80, pm: "Jane Smith", spoc:"Sruti", delay: 0, goLive: "2024-12-20", ryg: 0 },
+  { customer: "Sterlite", type: "Copper", site: "Nevada", projCode: "P789", ProdName: "Inplant",currentphase: "Dev", status: "On Track", progress: 60, pm: "Alice Lee", spoc:"Sana", delay: 5, goLive: "2024-11-15", ryg: 2 },
+  { customer: "UTCL", type: "Cement", site: "Kesoram", projCode: "P321", ProdName: "VC",currentphase: "Testing/SIT", status: "Delayed", progress: 30, pm: "Robert Green", spoc:"ABC", delay: 15, goLive: "2025-02-01", ryg: 1 },
+  { customer: "Amrit", type: "Cement", site: "Texas", projCode: "P123", ProdName: "VC",currentphase: "Dev", status: "Delayed", progress: 40, pm: "John Doe", spoc:"XYZ", delay: 10, goLive: "2025-01-10", ryg: 0 },
+  { customer: "UTCL", type: "Cement", site: "Jharia", projCode: "P456", ProdName: "Inplant",currentphase: "Dev", status: "On Track", progress: 80, pm: "Jane Smith", spoc:"Rohit", delay: 0, goLive: "2024-12-20", ryg: 0},
+  { customer: "ABG", type: "Fibers", site: "Nevada", projCode: "P789", ProdName: "Epod",currentphase: "Dev", status: "On Track", progress: 60, pm: "Alice Lee", spoc:"Ram", delay: 5, goLive: "2024-11-15", ryg: 0 },
+  { customer: "ABC", type: "Cement", site: "New York", projCode: "P321", ProdName: "Epod",currentphase: "Dev", status: "Delayed", progress: 30, pm: "Robert Green", spoc:"Sham", delay: 15, goLive: "2025-02-01", ryg: 2 },
 ];
 
 const filterTypes = [
   { label: "By Customer", value: "customer" },
   { label: "By Site", value: "site" },
-  { label: "Delayed Projects", value: "delayed" },
+  { label: "Product", value: "type" },
+  { label: "Model", value: "ProdName" },
+  { label: "Delayed Proj", value: "delayed" },
   { label: "Upcoming Go-live", value: "goLive" },
 ];
 
@@ -61,6 +63,10 @@ const SummaryTable = () => {
             setFilteredData(data.filter((item) => item.customer === value));
         } else if (type === "site") {
             setFilteredData(data.filter((item) => item.site === value));
+        } else if (type === "type") {
+            setFilteredData(data.filter((item) => item.site === value));
+        } else if (type === "ProdName") {
+            setFilteredData(data.filter((item) => item.site === value));
         } else if (type === "delayed") {
             setFilteredData(data.filter((item) => item.status === "Delayed"));
         } else if (type === "goLive") {
@@ -71,14 +77,6 @@ const SummaryTable = () => {
         // Reset the table if no filter is applied
         setFilteredData(data);
     }
-  };
-
-
-  const toggleRYG = (index: number) => {
-    const updatedData = filteredData.map((row, idx) =>
-      idx === index ? { ...row, ryg: !row.ryg } : row
-    );
-    setFilteredData(updatedData);
   };
 
   return (
@@ -108,6 +106,12 @@ const SummaryTable = () => {
                 {site}
               </option>
             ))}
+          {filterType === "type" &&
+            [...new Set(data.map((item) => item.type))].map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
         </select>
       )}
     </div>
@@ -135,12 +139,15 @@ const SummaryTable = () => {
       <tr>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Index</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Customer</th>
+        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Type</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Site</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Proj Code</th>
-        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Proj Name</th>
+        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Product</th>
+        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Current Phase</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Status</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Progress%</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">PM</th>
+        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">SPOC</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Delay %</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Go-live dt.</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">RYG</th>
@@ -158,21 +165,18 @@ const SummaryTable = () => {
         >
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{index + 1}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.customer}</td>
+          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.type}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.site}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.projCode}</td>
-          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.projName}</td>
+          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.ProdName}</td>
+          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.currentphase}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.status}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.progress}%</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.pm}</td>
+          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.spoc}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.delay}%</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.goLive}</td>
-          <td className="px-2 py-1 border dark:border-gray-700 text-center whitespace-nowrap">
-            <input
-              type="checkbox"
-              checked={item.ryg}
-              onChange={() => toggleRYG(index)}
-            />
-          </td>
+          <td className="px-2 py-1 border dark:border-gray-700 text-center whitespace-nowrap"></td>
         </tr>
       ))}
     </tbody>

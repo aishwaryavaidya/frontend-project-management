@@ -1,0 +1,13 @@
+/* GanttStyles.css */
+
+/* Reduce the font size for task text inside Gantt bars */
+.gantt_task_content {
+    font-size: 12px; /* Adjust the size as needed, sm -> 12px */
+    font-weight: normal; /* Optional, for lighter font weight */
+    color: #333; /* Optional, for better readability */
+}
+
+/* Ensure milestone labels have consistent font size */
+.gantt_task_milestone .gantt_task_content {
+    font-size: 12px;
+}
