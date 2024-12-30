@@ -16,9 +16,9 @@ const formatTimelineItems = (phases: Phase[]): TimelineItem[] => {
   phases.forEach((phase) => {
     phase.milestones.forEach((milestone) => {
       timelineItems.push({
-        title: `${milestone.name} (${milestone.start_date.toLocaleDateString()} - ${milestone.end_date.toLocaleDateString()})`,
+        title: `${milestone.name}`,
         cardTitle: milestone.name,
-        cardSubtitle: `Phase: ${phase.name}`,
+        cardSubtitle: `${phase.name}`,
         cardDetailedText: milestone.tasks
           .map(
             (task) =>
@@ -35,8 +35,8 @@ const ProjectTimeline: React.FC = () => {
   const timelineItems = formatTimelineItems(projectData);
 
   return (
-    <div style={{ width: "100%", height: "600px" }}>
-      <h1 className="text-xl font-bold mb-4">Project Timeline</h1>
+    <div className="justify-between items-center" style={{ width: "100%", height: "100vh" }}>
+      <h1 className="text-xl font-bold mb-4 ml-4">Project Timeline</h1>
       <Chrono
         items={timelineItems}
         mode="VERTICAL"  

@@ -97,7 +97,7 @@ const ProjectGanttChart = () => {
         return { data: tasks, links };
     };
 
-    return <div id="gantt_here" style={{ width: "100%", height: "400px" }}></div>;
+    return <div id="gantt_here" style={{ width: "99%", height: "100vh" }}></div>;
 };
 
 export default ProjectGanttChart;
