@@ -1,10 +1,11 @@
 import ProjectTable from '@/components/Tables/ProjectTable'
 import React from 'react'
+import { SupersonicTable } from './SupersonicTable'
 
 const page = () => {
   return (
     <div>
-      <ProjectTable/>
+      <SupersonicTable/>
     </div>
   )
 }

@@ -71,3 +71,76 @@ model Category {
   updatedAt DateTime? @updatedAt
 }
  
+
+//supersonic
+model Phase {
+  id          Int         @id @default(autoincrement())
+  name        String
+  milestones  Milestone[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Milestone {
+  id            Int       @id @default(autoincrement())
+  index         Int
+  name          String
+  startDate     DateTime
+  endDate       DateTime
+  actualStart   DateTime?
+  actualEnd     DateTime?
+  progress      Float     @default(0)
+  clientSpoc    String
+  apSpoc        String
+  raidNotes     String?
+  phaseId       Int
+  phase         Phase     @relation(fields: [phaseId], references: [id])
+  tasks         Task[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  isExpanded    Boolean?
+}
+
+model Task {
+  id            Int       @id @default(autoincrement())
+  index         String    // Format: "1.1", "1.2", etc.
+  name          String
+  startDate     DateTime
+  endDate       DateTime
+  actualStart   DateTime?
+  actualEnd     DateTime?
+  progress      Float     @default(0)
+  clientSpoc    String
+  apSpoc        String
+  milestoneId   Int
+  milestone     Milestone @relation(fields: [milestoneId], references: [id])
+  assignments   Assignment[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  projectManager String
+}
+
+model Employee {
+  id           Int          @id @default(autoincrement())
+  name         String
+  role         String
+  assignments  Assignment[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  percentage   Int
+}
+
+model Assignment {
+  id         Int       @id @default(autoincrement())
+  taskId     Int
+  employeeId Int
+  role       String
+  duration   Int       // Duration in days
+  employee      Employee  @relation(fields: [employeeId], references: [id])
+  task       Task      @relation(fields: [taskId], references: [id])
+  employeeName   String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+} 
+
+

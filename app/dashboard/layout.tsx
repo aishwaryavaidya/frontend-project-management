@@ -20,9 +20,9 @@ import { ModeToggle } from '@/components/mode-toggle'
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-    <AppSidebar />
+    <AppSidebar className="flex z-40"/>
     <SidebarInset>
-      <header className="flex z-50 bg-white h-11 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-10 sticky top-0 z-50 dark:bg-black">
+      <header className="flex z-30 bg-white h-11 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-10 sticky top-0 z-30 dark:bg-black">
         <div className="flex  items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />

@@ -140,7 +140,7 @@ export default function ProjectTable() {
   };
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-800 dark:text-gray-100">
+    <div className="p-3 bg-white dark:bg-gray-800 dark:text-gray-100">
       <h1 className="text-2xl font-bold mb-4">Project Planning Table</h1>
       <Button onClick={addColumn} type="primary" className="mb-4">
         Add Column

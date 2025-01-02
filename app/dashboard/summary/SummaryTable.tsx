@@ -132,25 +132,26 @@ const SummaryTable = () => {
   </div>
 
   {/* Table */}
-  <div className="overflow-x-auto overflow-y-auto sm:max-h-[300px] sm:max-w-[58vw] md:max-h-[350px] md:max-w-[60vw] lg:max-h-[300px] lg:max-w-[60vw]">
+  <div className="overflow-x-auto overflow-y-auto h-[300px] w-[95vw]">
   <table className="min-w-full border-collapse text-xs">
     {/* Sticky header */}
     <thead className="bg-gray-200 dark:bg-gray-950 sticky top-0 z-10 shadow">
       <tr>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Index</th>
+        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">RYG</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Customer</th>
-        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Type</th>
+        {/* <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Type</th> */}
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Site</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Proj Code</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Product</th>
+        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">KickOff dt.</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Current Phase</th>
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Status</th>
-        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Progress%</th>
-        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">PM</th>
-        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">SPOC</th>
-        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Delay %</th>
+        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Prog%</th>
+        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Scheduled%</th>
+        {/* <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">SPOC</th> */}
         <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">Go-live dt.</th>
-        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">RYG</th>
+        <th className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">PM</th>
       </tr>
     </thead>
     <tbody>
@@ -164,19 +165,20 @@ const SummaryTable = () => {
           }`}
         >
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{index + 1}</td>
+          <td className="px-2 py-1 border dark:border-gray-700 text-center whitespace-nowrap">{item.ryg}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.customer}</td>
-          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.type}</td>
+          {/* <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.type}</td> */}
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.site}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.projCode}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.ProdName}</td>
+          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.goLive}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.currentphase}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.status}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.progress}%</td>
-          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.pm}</td>
-          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.spoc}</td>
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.delay}%</td>
+          {/* <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.spoc}</td> */}
           <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.goLive}</td>
-          <td className="px-2 py-1 border dark:border-gray-700 text-center whitespace-nowrap"></td>
+          <td className="px-2 py-1 border dark:border-gray-700 whitespace-nowrap">{item.pm}</td>
         </tr>
       ))}
     </tbody>
