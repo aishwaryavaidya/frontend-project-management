@@ -25,6 +25,8 @@ import * as XLSX from 'xlsx';
 import { types } from 'node:util';
 import { UserPlus } from 'lucide-react';
 import { BulkAssignDialog } from './bulk-assign-dialog';
+import { generateRandomColor } from '@/lib/utils';
+import { AddTaskDialog } from './add-task-dialog';
 
 
 
@@ -36,6 +38,65 @@ export function SupersonicTable() {
   const { canUndo, canRedo, undo, redo, addToHistory } = useHistory(phases, setPhases);
   const [selectedTasks, setSelectedTasks] = useState<Task[]>([]);
   const [bulkAssignOpen, setBulkAssignOpen] = useState(false);
+  const [addTaskDialogOpen, setAddTaskDialogOpen] = useState(false);
+  const [selectedMilestoneId, setSelectedMilestoneId] = useState<number | null>(null);
+  const [phaseColors] = useState(() => 
+    Object.fromEntries(initialPhases.map(phase => [phase.id, generateRandomColor()]))
+  );
+
+
+  const handleAddTask = (milestoneId: number, taskData: Partial<Task>) => {
+    const newPhases = phases.map(phase => ({
+      ...phase,
+      milestones: phase.milestones.map(milestone => {
+        if (milestone.id === milestoneId) {
+          const newTask: Task = {
+            ...taskData,
+            id: Date.now(),
+            index: `${milestone.index}.${milestone.tasks.length + 1}`,
+          } as Task;
+          return {
+            ...milestone,
+            tasks: [...milestone.tasks, newTask]
+          };
+        }
+        return milestone;
+      })
+    }));
+    setPhases(newPhases);
+    addToHistory(newPhases);
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const workbook = XLSX.read(e.target?.result, { type: 'binary' });
+        // Process the workbook data and update the state
+        // This is a simplified example - you'll need to adapt it to your data structure
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const data = XLSX.utils.sheet_to_json(firstSheet);
+        console.log('Imported data:', data);
+      };
+      reader.readAsBinaryString(file);
+    }
+  };
+
+  const handleDeleteMilestone = (phaseId: number, milestoneId: number) => {
+    const newPhases = phases.map(phase => {
+      if (phase.id === phaseId) {
+        return {
+          ...phase,
+          milestones: phase.milestones.filter(m => m.id !== milestoneId)
+        };
+      }
+      return phase;
+    });
+    setPhases(newPhases);
+    addToHistory(newPhases);
+  };
+
 
   const handleTaskAssign = (taskId: number, assignments: Omit<Assignment, 'id'>[]) => {
     const newPhases = phases.map(phase => ({
@@ -200,6 +261,11 @@ export function SupersonicTable() {
           >
             <Redo2 className="w-4 h-4" />
           </Button>
+          <Button onClick={() => setBulkAssignOpen(true)}>
+            <UserPlus className="w-4 h-4 mr-2" />
+            Bulk Assign
+          </Button>
+
           <AddMilestoneDialog phases={phases} onAdd={handleAddMilestone} />
           <Button onClick={exportToExcel}>
             <Download className="w-4 h-4 mr-2" />
@@ -208,6 +274,12 @@ export function SupersonicTable() {
           <Button>
             <Upload className="w-4 h-4 mr-2" />
             Import
+            <input
+              type="file"
+              hidden
+              accept=".xlsx,.xls"
+              onChange={handleFileUpload}
+            />
           </Button>
         </div>
       </div>
@@ -215,7 +287,7 @@ export function SupersonicTable() {
       <div className="grid grid-cols-[50px,1fr] gap-4">
         {phases.map(phase => (
           <React.Fragment key={phase.id}>
-            <div className="bg-blue-100 p-1 rounded-lg h-full flex items-center justify-center">
+            <div className="bg-blue-100 p-1 rounded-lg h-full flex items-center justify-center" style={{ backgroundColor: phaseColors[phase.id] }}>
               <div className="font-semibold transform -rotate-90 whitespace-nowrap text-gray-700 ">
                 {phase.name}
               </div>
@@ -239,8 +311,25 @@ export function SupersonicTable() {
                         <span className="font-medium">{milestone.name}</span>
                       </div>
                       {/* Milestone actions */}
-                      <div>
-                        {/* Insert your milestone actions here */}
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedMilestoneId(milestone.id);
+                            setAddTaskDialogOpen(true);
+                          }}
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Task
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleDeleteMilestone(phase.id, milestone.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -261,6 +350,8 @@ export function SupersonicTable() {
                             <TableHead>Progress</TableHead>
                             <TableHead>Client SPOC</TableHead>
                             <TableHead>AP SPOC</TableHead>
+                            <TableHead>PM</TableHead>
+                            <TableHead>Assigned To</TableHead>
                             <TableHead>Actions</TableHead>
                           </TableRow>
                         </TableHeader>
@@ -306,6 +397,25 @@ export function SupersonicTable() {
           </React.Fragment>
         ))}
       </div>
+
+      <AddTaskDialog
+        milestoneId={selectedMilestoneId!}
+        open={addTaskDialogOpen}
+        onOpenChange={setAddTaskDialogOpen}
+        onAdd={(taskData) => {
+          if (selectedMilestoneId) {
+            handleAddTask(selectedMilestoneId, taskData);
+          }
+        }}
+      />
+
+      <BulkAssignDialog
+        selectedTasks={selectedTasks}
+        open={bulkAssignOpen}
+        onOpenChange={setBulkAssignOpen}
+        onAssign={handleBulkAssign}
+      />
+
     </div>
   );
   
