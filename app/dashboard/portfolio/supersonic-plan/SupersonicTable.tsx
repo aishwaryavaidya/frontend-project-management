@@ -42,13 +42,23 @@ export function SupersonicTable() {
 
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([]);
-  
+  const [bulkOperationsOpen, setBulkOperationsOpen] = useState(false);
+  const [addTaskDialogOpen, setAddTaskDialogOpen] = useState(false);
+  const [selectedMilestoneId, setSelectedMilestoneId] = useState<number | null>(null);
+  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const toggleRow = (id: string) => {
+    setExpandedRows(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+
+
+
 
   const [bulkAssignOpen, setBulkAssignOpen] = useState(false);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
 
-  const [addTaskDialogOpen, setAddTaskDialogOpen] = useState(false);
-  const [selectedMilestoneId, setSelectedMilestoneId] = useState<number | null>(null);
+  
+  
   const [phaseColors] = useState(() => 
     Object.fromEntries(initialPhases.map(phase => [phase.id, generateRandomColor()]))
   );
