@@ -12,15 +12,36 @@ interface TaskRowProps {
   onUpdate: (task: Task) => void;
   onDelete: (taskId: number) => void;
   onAssign: (taskId: number, assignments: Omit<Assignment, 'id'>[]) => void;
+  isSelectionMode?: boolean;
+  isSelected?: boolean;
+  onSelect?: () => void;
 }
 
-export function TaskRow({ task, onUpdate, onDelete, onAssign }: TaskRowProps) {
+export function TaskRow({ 
+    task, 
+    isSelectionMode,
+    isSelected,
+    onSelect,
+    onUpdate, 
+    onDelete, 
+    onAssign 
+  }: TaskRowProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
 
   return (
     <>
       <TableRow>
+      {isSelectionMode && (
+        <TableCell>
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={onSelect}
+              className="w-4 h-4"
+            />
+          </TableCell>
+        )}
         <TableCell>{task.index}</TableCell>
         <TableCell>{task.name}</TableCell>
         <TableCell>{task.startDate.toLocaleDateString()}</TableCell>

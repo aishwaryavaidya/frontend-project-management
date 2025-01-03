@@ -76,5 +76,36 @@ export const initialPhases: Phase[] = [
         ]
       }
     ]
+  },
+
+  {
+    id: 3,
+    name: "Development",
+    milestones: [
+      {
+        id: 3,
+        index: 1,
+        name: "System Architecture",
+        startDate: new Date(2024, 0, 16),
+        endDate: new Date(2024, 1, 15),
+        progress: 60,
+        clientSpoc: "Sarah Wilson",
+        apSpoc: "Bob Miller",
+        tasks: [
+          {
+            id: 3,
+            index: "3.1",
+            name: "Architecture Design",
+            startDate: new Date(2024, 0, 16),
+            endDate: new Date(2024, 0, 31),
+            progress: 80,
+            clientSpoc: "Sarah Wilson",
+            apSpoc: "Bob Miller",
+            projectManager: "David Clark",
+            assignments: []
+          }
+        ]
+      }
+    ]
   }
 ];

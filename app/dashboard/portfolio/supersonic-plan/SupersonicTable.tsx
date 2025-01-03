@@ -24,9 +24,10 @@ import {Phase, Milestone, Task, Assignment} from '@/types/types';
 import * as XLSX from 'xlsx';
 import { types } from 'node:util';
 import { UserPlus } from 'lucide-react';
-import { BulkAssignDialog } from './bulk-assign-dialog';
 import { generateRandomColor } from '@/lib/utils';
 import { AddTaskDialog } from './add-task-dialog';
+import { BulkOperationsDialog } from './bulk-operations/bulk-operations-dialog';
+
 
 
 
@@ -34,17 +35,60 @@ import { AddTaskDialog } from './add-task-dialog';
 // ... (interfaces remain the same, add actualDuration to Task and Milestone)
 
 export function SupersonicTable() {
+
   const [phases, setPhases] = useState<Phase[]>(initialPhases);
+
   const { canUndo, canRedo, undo, redo, addToHistory } = useHistory(phases, setPhases);
-  const [selectedTasks, setSelectedTasks] = useState<Task[]>([]);
+
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([]);
+  
+
   const [bulkAssignOpen, setBulkAssignOpen] = useState(false);
+  const [showCheckboxes, setShowCheckboxes] = useState(false);
+
   const [addTaskDialogOpen, setAddTaskDialogOpen] = useState(false);
   const [selectedMilestoneId, setSelectedMilestoneId] = useState<number | null>(null);
   const [phaseColors] = useState(() => 
     Object.fromEntries(initialPhases.map(phase => [phase.id, generateRandomColor()]))
   );
+  const toggleCheckboxes = () => setShowCheckboxes(prev => !prev);
+
+  const toggleSelectionMode = () => {
+    setIsSelectionMode(!isSelectionMode);
+    if (isSelectionMode) {
+      setSelectedTaskIds([]); // Clear selections when exiting selection mode
+    }
+  };
+
+  const handleTaskSelection = (taskId: number) => {
+    setSelectedTaskIds(prev => 
+      prev.includes(taskId) 
+        ? prev.filter(id => id !== taskId)
+        : [...prev, taskId]
+    );
+  };
+
+  
 
 
+  const handleBulkUpdate = (updates: Partial<Task>[]) => {
+    const newPhases = phases.map(phase => ({
+      ...phase,
+      milestones: phase.milestones.map(milestone => ({
+        ...milestone,
+        tasks: milestone.tasks.map(task => {
+          const update = updates.find(u => u.id === task.id);
+          return update ? { ...task, ...update } : task;
+        })
+      }))
+    }));
+    setPhases(newPhases);
+    addToHistory(newPhases);
+    setSelectedTaskIds([]);
+    setBulkAssignOpen(false);
+  };
+  
   const handleAddTask = (milestoneId: number, taskData: Partial<Task>) => {
     const newPhases = phases.map(phase => ({
       ...phase,
@@ -125,40 +169,33 @@ export function SupersonicTable() {
     addToHistory(newPhases);
   };
 
-  const handleTaskSelection = (task: Task, isSelected: boolean) => {
-    setSelectedTasks(prev => 
-      isSelected 
-        ? [...prev, task]
-        : prev.filter(t => t.id !== task.id)
-    );
-  };
 
-  const handleBulkAssign = (taskIds: number[], newAssignments: Omit<Assignment, 'id'>[]) => {
-    const newPhases = phases.map(phase => ({
+  const handleBulkAssign = (taskIds: number[],newAssignments: Omit<Assignment, 'id'>[]) => {
+    const updatedPhases = phases.map(phase => ({
       ...phase,
       milestones: phase.milestones.map(milestone => ({
         ...milestone,
         tasks: milestone.tasks.map(task => {
-          if (taskIds.includes(task.id)) {
+          if (selectedTaskIds.includes(task.id)) {
             return {
               ...task,
               assignments: [
                 ...task.assignments,
                 ...newAssignments.map((assignment, index) => ({
                   ...assignment,
-                  id: Date.now() + index
-                }))
-              ]
+                  id: Date.now() + index,
+                })),
+              ],
             };
           }
           return task;
-        })
-      }))
+        }),
+      })),
     }));
-
-    setPhases(newPhases);
-    addToHistory(newPhases);
-    setSelectedTasks([]);
+    setPhases(updatedPhases);
+    setSelectedTaskIds([]);
+    setBulkAssignOpen(false);
+    setShowCheckboxes(false);
   };
 
   const toggleMilestone = (phaseId: number, milestoneId: number) => {
@@ -243,7 +280,7 @@ export function SupersonicTable() {
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between mb-4">
-        <h1 className="text-2xl font-bold">Project Plan</h1>
+        <h1 className="text-2xl font-bold">Project Supersonic</h1>
         <div className="space-x-2">
           <Button 
             variant="outline" 
@@ -253,6 +290,7 @@ export function SupersonicTable() {
           >
             <Undo2 className="w-4 h-4" />
           </Button>
+
           <Button 
             variant="outline" 
             size="sm"
@@ -261,10 +299,22 @@ export function SupersonicTable() {
           >
             <Redo2 className="w-4 h-4" />
           </Button>
-          <Button onClick={() => setBulkAssignOpen(true)}>
-            <UserPlus className="w-4 h-4 mr-2" />
-            Bulk Assign
+          
+          <Button
+            variant={isSelectionMode ? "secondary" : "outline"}
+            onClick={toggleSelectionMode}
+          >
+            {isSelectionMode ? "Cancel Selection" : "Select Tasks"}
           </Button>
+          {isSelectionMode && selectedTaskIds.length > 0 && (
+            <Button onClick={() => {
+              setBulkAssignOpen(true);
+              setIsSelectionMode(false);
+            }}>
+              <Edit2 className="w-4 h-4 mr-2" />
+              Modify Selected ({selectedTaskIds.length})
+            </Button>
+          )}
 
           <AddMilestoneDialog phases={phases} onAdd={handleAddMilestone} />
           <Button onClick={exportToExcel}>
@@ -339,6 +389,7 @@ export function SupersonicTable() {
                       <Table>
                         <TableHeader>
                           <TableRow>
+                          {isSelectionMode && <TableHead className="w-12"></TableHead>}
                             <TableHead>Index</TableHead>
                             <TableHead>Task Name</TableHead>
                             <TableHead>Start Date</TableHead>
@@ -360,6 +411,9 @@ export function SupersonicTable() {
                             <TaskRow 
                               key={task.id}
                               task={task}
+                              isSelectionMode={isSelectionMode}
+                              isSelected={selectedTaskIds.includes(task.id)}
+                              onSelect={() => handleTaskSelection(task.id)}
                               onUpdate={(updatedTask) => {
                                 const newPhases = phases.map(phase => ({
                                   ...phase,
@@ -386,6 +440,7 @@ export function SupersonicTable() {
                               }}
                               onAssign={(taskId, assignments) => handleTaskAssign(taskId, assignments)}
                             />
+                            
                           ))}
                         </TableBody>
                       </Table>
@@ -409,11 +464,14 @@ export function SupersonicTable() {
         }}
       />
 
-      <BulkAssignDialog
-        selectedTasks={selectedTasks}
+      <BulkOperationsDialog
+        selectedTasks={phases
+          .flatMap(p => p.milestones)
+          .flatMap(m => m.tasks)
+          .filter(t => selectedTaskIds.includes(t.id))}
         open={bulkAssignOpen}
         onOpenChange={setBulkAssignOpen}
-        onAssign={handleBulkAssign}
+        onBulkUpdate={handleBulkUpdate}
       />
 
     </div>

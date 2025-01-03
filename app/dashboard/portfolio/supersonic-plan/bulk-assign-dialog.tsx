@@ -7,6 +7,7 @@ import { Plus, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Task, Employee, Assignment } from '@/types/types';
 import { employees } from '@/data/employee';
+import { BulkOperationsDialog } from './bulk-operations/bulk-operations-dialog';
 
 interface BulkAssignDialogProps {
   selectedTasks: Task[];
@@ -22,6 +23,7 @@ interface AssignmentInput {
 }
 
 export function BulkAssignDialog({ selectedTasks, open, onOpenChange, onAssign }: BulkAssignDialogProps) {
+
   const [assignments, setAssignments] = useState<AssignmentInput[]>([
     { employeeId: "", percentage: "100" }
   ]);
