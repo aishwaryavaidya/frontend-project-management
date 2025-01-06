@@ -17,10 +17,18 @@ interface AssignmentInput {
   percentage: string;
 }
 
-export function BulkAssignContent({ selectedTasks, onUpdate, onClose }: BulkAssignContentProps) {
+export function BulkAssignContent({ selectedTasks, onUpdate, onClose }: BulkAssignContentProps): JSX.Element {
   const [assignments, setAssignments] = useState<AssignmentInput[]>([
     { employeeId: "", percentage: "100" }
   ]);
+
+  const addAssignment = () => {
+    setAssignments([...assignments, { employeeId: "", percentage: "" }]);
+  };
+
+  const removeAssignment = (index: number) => {
+    setAssignments(assignments.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,5 +58,72 @@ export function BulkAssignContent({ selectedTasks, onUpdate, onClose }: BulkAssi
     }
   };
 
-  // ... rest of the component implementation similar to BulkAssignDialog
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-4">
+        {assignments.map((assignment, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <div className="flex-1">
+              <Select
+                value={assignment.employeeId}
+                onValueChange={(value) => {
+                  const newAssignments = [...assignments];
+                  newAssignments[index].employeeId = value;
+                  setAssignments(newAssignments);
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select employee" />
+                </SelectTrigger>
+                <SelectContent>
+                  {employees.map(employee => (
+                    <SelectItem key={employee.id} value={employee.id.toString()}>
+                      {employee.name} ({employee.role})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-24">
+              <Input
+                type="number"
+                min="1"
+                max="100"
+                value={assignment.percentage}
+                onChange={(e) => {
+                  const newAssignments = [...assignments];
+                  newAssignments[index].percentage = e.target.value;
+                  setAssignments(newAssignments);
+                }}
+                placeholder="%"
+              />
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => removeAssignment(index)}
+              disabled={assignments.length === 1}
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+        ))}
+      </div>
+      
+      <Button
+        type="button"
+        variant="outline"
+        onClick={addAssignment}
+        className="w-full"
+      >
+        <Plus className="w-4 h-4 mr-2" />
+        Add Another Assignment
+      </Button>
+      
+      <Button type="submit" className="w-full">
+        Assign to Selected Tasks
+      </Button>
+    </form>
+  );
 }
