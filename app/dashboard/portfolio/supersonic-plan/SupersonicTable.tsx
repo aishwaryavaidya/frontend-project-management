@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronDown, ChevronRight, Plus, Trash2, Download, Upload, Undo2, Redo2, Edit2 } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Trash2, Download, Upload, Undo2, Redo2, Edit2, Minus } from 'lucide-react';
 import { calculateMilestoneProgress, calculateDuration } from '@/lib/utils';
 import { TaskRow } from './task-row';
 import { AddMilestoneDialog } from './add-milestone-dialog';
@@ -46,6 +46,7 @@ export function SupersonicTable() {
   const [addTaskDialogOpen, setAddTaskDialogOpen] = useState(false);
   const [selectedMilestoneId, setSelectedMilestoneId] = useState<number | null>(null);
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const [expandedMilestones, setExpandedMilestones] = useState<number[]>([]);
   const toggleRow = (id: string) => {
     setExpandedRows(prev => ({ ...prev, [id]: !prev[id] }));
   };
@@ -79,7 +80,6 @@ export function SupersonicTable() {
     );
   };
 
-  
 
 
   const handleBulkUpdate = (updates: Partial<Task>[]) => {
@@ -209,23 +209,11 @@ export function SupersonicTable() {
   };
 
   const toggleMilestone = (phaseId: number, milestoneId: number) => {
-    setPhases(prevPhases => {
-      const newPhases = prevPhases.map(phase => {
-        if (phase.id === phaseId) {
-          return {
-            ...phase,
-            milestones: phase.milestones.map(milestone => {
-              if (milestone.id === milestoneId) {
-                return { ...milestone, isExpanded: !milestone.isExpanded };
-              }
-              return milestone;
-            }),
-          };
-        }
-        return phase;
-      });
-      return newPhases;
-    });
+    setExpandedMilestones(prev => 
+      prev.includes(milestoneId) 
+        ? prev.filter(id => id !== milestoneId)
+        : [...prev, milestoneId]
+    );
   };
 
   const handleAddMilestone = useCallback((phaseId: number, milestoneData: Partial<Milestone>) => {
@@ -292,47 +280,50 @@ export function SupersonicTable() {
       <div className="flex justify-between mb-4">
         <h1 className="text-2xl font-bold">Project Supersonic</h1>
         <div className="space-x-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={undo}
             disabled={!canUndo}
           >
-            <Undo2 className="w-4 h-4" />
+            <Undo2 className="w-3 h-3" />
           </Button>
-
-          <Button 
-            variant="outline" 
+  
+          <Button
+            variant="outline"
             size="sm"
             onClick={redo}
             disabled={!canRedo}
           >
-            <Redo2 className="w-4 h-4" />
+            <Redo2 className="w-3 h-3" />
           </Button>
-          
+  
           <Button
             variant={isSelectionMode ? "secondary" : "outline"}
             onClick={toggleSelectionMode}
           >
             {isSelectionMode ? "Cancel Selection" : "Select Tasks"}
           </Button>
+  
           {isSelectionMode && selectedTaskIds.length > 0 && (
-            <Button onClick={() => {
-              setBulkAssignOpen(true);
-              setIsSelectionMode(false);
-            }}>
-              <Edit2 className="w-4 h-4 mr-2" />
+            <Button
+              onClick={() => {
+                setBulkOperationsOpen(true); // Open bulk assign dialog
+                setIsSelectionMode(false); // Exit selection mode
+              }}
+            >
+              <Edit2 className="w-3 h-3 mr-2" />
               Modify Selected ({selectedTaskIds.length})
             </Button>
           )}
-
+  
           <AddMilestoneDialog phases={phases} onAdd={handleAddMilestone} />
           <Button onClick={exportToExcel}>
-            <Download className="w-4 h-4 mr-2" />
+            <Download className="w-3 h-3 mr-2" />
             Export
           </Button>
           <Button>
-            <Upload className="w-4 h-4 mr-2" />
+            <Upload className="w-3 h-3 mr-2" />
             Import
             <input
               type="file"
@@ -344,125 +335,118 @@ export function SupersonicTable() {
         </div>
       </div>
   
-      <div className="grid grid-cols-[50px,1fr] gap-4">
-        {phases.map(phase => (
-          <React.Fragment key={phase.id}>
-            <div className="bg-blue-100 p-1 rounded-lg h-full flex items-center justify-center" style={{ backgroundColor: phaseColors[phase.id] }}>
-              <div className="font-semibold transform -rotate-90 whitespace-nowrap text-gray-700 ">
-                {phase.name}
-              </div>
-            </div>
-            <div className="space-y-4">
-              {phase.milestones.map(milestone => (
-                <div key={milestone.id} className="bg-card rounded-lg shadow">
-                  <div className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <button
+      {/* Table */}
+      <div className="border rounded-lg">
+        <table>
+          <thead>
+            <tr className="bg-muted/50 text-sm font-[300]">
+              {isSelectionMode && <th className="w-8"></th>}
+              <th className="w-5"></th>
+              <th className="w-5">Index</th>
+              <th className="min-w-[200px]">Name</th>
+              <th className="w-32">Start Date</th>
+              <th className="w-32">End Date</th>
+              <th className="w-">Duration</th>
+              <th className="w-32">Actual Start</th>
+              <th className="w-32">Actual End</th>
+              <th className="w-24">Actual Duration</th>
+              <th className="w-24">Progress</th>
+              <th className="w-32">Client SPOC</th>
+              <th className="w-32">AP SPOC</th>
+              <th className="w-32">PM</th>
+              <th className="w-40">Assigned To</th>
+              <th className="w-32">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {phases.map(phase =>
+              phase.milestones.map(milestone => (
+                <React.Fragment key={milestone.id}>
+                  <tr className="bg-white h-8">
+                    {isSelectionMode && <td></td>}
+                    <td>
+                    <Button
+                          variant="ghost"
+                          size="sm"
                           onClick={() => toggleMilestone(phase.id, milestone.id)}
-                          className="p-1 hover:bg-accent rounded"
+                          className="p-0 h-8 w-8"
                         >
-                          {milestone.isExpanded ? (
-                            <ChevronDown className="w-4 h-4" />
-                          ) : (
-                            <ChevronRight className="w-4 h-4" />
-                          )}
-                        </button>
-                        <span className="font-medium">{milestone.name}</span>
-                      </div>
-                      {/* Milestone actions */}
-                      <div className="flex items-center space-x-2">
+                          <Minus className="bg-white border border-black" />
+                        </Button>
+                    </td>
+
+                    <td className="text-sm">{`M-${milestone.id}`}</td>
+                    <td className="text-sm truncate ">{milestone.name}</td>
+                    {/* {Array(10).fill(null).map((_, i) => (
+                      <td key={i}></td>
+                    ))} */}
+                    <td>
+                      <div className="flex items-center space-x-1">
                         <Button
                           variant="outline"
-                          size="sm"
+                          size="xs"
                           onClick={() => {
                             setSelectedMilestoneId(milestone.id);
-                            setAddTaskDialogOpen(true);
-                          }}
+                            setAddTaskDialogOpen(true);}}
+                          className="h-6 px-2 text-xs"
                         >
-                          <Plus className="w-4 h-4 mr-2" />
-                          Add Task
+                          <Plus className="w-3 h-3 mr-0" />
+                          Task
                         </Button>
                         <Button
                           variant="destructive"
-                          size="sm"
+                          size="xs"
                           onClick={() => handleDeleteMilestone(phase.id, milestone.id)}
+                          className="h-6 px-2"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3 h-3" />
                         </Button>
                       </div>
-                    </div>
-                  </div>
-  
-                  {milestone.isExpanded && milestone.tasks && milestone.tasks.length > 0 && (
-                    <div className="p-4">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                          {isSelectionMode && <TableHead className="w-12"></TableHead>}
-                            <TableHead>Index</TableHead>
-                            <TableHead>Task Name</TableHead>
-                            <TableHead>Start Date</TableHead>
-                            <TableHead>End Date</TableHead>
-                            <TableHead>Duration</TableHead>
-                            <TableHead>Actual Start</TableHead>
-                            <TableHead>Actual End</TableHead>
-                            <TableHead>Actual Duration</TableHead>
-                            <TableHead>Progress</TableHead>
-                            <TableHead>Client SPOC</TableHead>
-                            <TableHead>AP SPOC</TableHead>
-                            <TableHead>PM</TableHead>
-                            <TableHead>Assigned To</TableHead>
-                            <TableHead>Actions</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {milestone.tasks.map(task => (
-                            <TaskRow 
-                              key={task.id}
-                              task={task}
-                              isSelectionMode={isSelectionMode}
-                              isSelected={selectedTaskIds.includes(task.id)}
-                              onSelect={() => handleTaskSelection(task.id)}
-                              onUpdate={(updatedTask) => {
-                                const newPhases = phases.map(phase => ({
-                                  ...phase,
-                                  milestones: phase.milestones.map(m => ({
-                                    ...m,
-                                    tasks: m.tasks.map(t =>
-                                      t.id === updatedTask.id ? { ...t, ...updatedTask } : t
-                                    ),
-                                  })),
-                                }));
-                                setPhases(newPhases);
-                                addToHistory(newPhases);
-                              }}
-                              onDelete={(taskId) => {
-                                const newPhases = phases.map(phase => ({
-                                  ...phase,
-                                  milestones: phase.milestones.map(m => ({
-                                    ...m,
-                                    tasks: m.tasks.filter(t => t.id !== taskId),
-                                  })),
-                                }));
-                                setPhases(newPhases);
-                                addToHistory(newPhases);
-                              }}
-                              onAssign={(taskId, assignments) => handleTaskAssign(taskId, assignments)}
-                            />
-                            
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </React.Fragment>
-        ))}
+                    </td>
+                  </tr>
+                  {expandedMilestones.includes(milestone.id) &&
+                    milestone.tasks.map(task => (
+                      <TaskRow
+                        key={task.id}
+                        task={task}
+                        isSelectionMode={isSelectionMode}
+                        isSelected={selectedTaskIds.includes(task.id)}
+                        onSelect={() => handleTaskSelection(task.id)}
+                        onUpdate={(updatedTask) => {
+                          const newPhases = phases.map(phase => ({
+                            ...phase,
+                            milestones: phase.milestones.map(m => ({
+                              ...m,
+                              tasks: m.tasks.map(t =>
+                                t.id === updatedTask.id ? { ...t, ...updatedTask } : t
+                              ),
+                            })),
+                          }));
+                          setPhases(newPhases);
+                          addToHistory(newPhases);
+                        }}
+                        onDelete={(taskId) => {
+                          const newPhases = phases.map(phase => ({
+                            ...phase,
+                            milestones: phase.milestones.map(m => ({
+                              ...m,
+                              tasks: m.tasks.filter(t => t.id !== taskId),
+                            })),
+                          }));
+                          setPhases(newPhases);
+                          addToHistory(newPhases);
+                        }}
+                        onAssign={(taskId, assignments) => handleTaskAssign(taskId, assignments)}
+                      />
+                    ))}
+                </React.Fragment>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
-
+  
+      {/* Dialogs */}
       <AddTaskDialog
         milestoneId={selectedMilestoneId!}
         open={addTaskDialogOpen}
@@ -473,18 +457,17 @@ export function SupersonicTable() {
           }
         }}
       />
-
       <BulkOperationsDialog
         selectedTasks={phases
           .flatMap(p => p.milestones)
           .flatMap(m => m.tasks)
           .filter(t => selectedTaskIds.includes(t.id))}
-        open={bulkAssignOpen}
-        onOpenChange={setBulkAssignOpen}
+        open={bulkOperationsOpen}
+        onOpenChange={setBulkOperationsOpen}
         onBulkUpdate={handleBulkUpdate}
       />
-
     </div>
   );
+
   
 }

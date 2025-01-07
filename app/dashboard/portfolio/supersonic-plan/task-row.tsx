@@ -1,5 +1,7 @@
+//task-row
+
 import React, { useState } from 'react';
-import { TableCell, TableRow } from "@/components/ui/table";
+// import { TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Trash2, Edit2, UserPlus } from 'lucide-react';
 import { calculateDuration } from '@/lib/utils';
@@ -31,66 +33,67 @@ export function TaskRow({
 
   return (
     <>
-      <TableRow>
+      <tr className='text-sm border border-gray-300'>
       {isSelectionMode && (
-        <TableCell>
+        <td>
             <input
               type="checkbox"
               checked={isSelected}
               onChange={onSelect}
               className="w-4 h-4"
             />
-          </TableCell>
+          </td>
         )}
-        <TableCell>{task.index}</TableCell>
-        <TableCell>{task.name}</TableCell>
-        <TableCell>{task.startDate.toLocaleDateString()}</TableCell>
-        <TableCell>{task.endDate.toLocaleDateString()}</TableCell>
-        <TableCell>{calculateDuration(task.startDate, task.endDate)} days</TableCell>
-        <TableCell>{task.actualStart?.toLocaleDateString() || '-'}</TableCell>
-        <TableCell>{task.actualEnd?.toLocaleDateString() || '-'}</TableCell>
-        <TableCell>
+        <td></td>
+        <td className='text-sm border border-gray-300'>{task.index}</td>
+        <td className='text-sm border border-gray-300'>{task.name}</td>
+        <td className='text-sm border border-gray-300'>{task.startDate.toLocaleDateString()}</td>
+        <td className='text-sm border border-gray-300'>{task.endDate.toLocaleDateString()}</td>
+        <td className='text-sm border border-gray-300'>{calculateDuration(task.startDate, task.endDate)} days</td>
+        <td className='text-sm border border-gray-300'>{task.actualStart?.toLocaleDateString() || '-'}</td>
+        <td className='text-sm border border-gray-300'>{task.actualEnd?.toLocaleDateString() || '-'}</td>
+        <td className='text-sm border border-gray-300'>
           {task.actualStart && task.actualEnd 
             ? `${calculateDuration(task.actualStart, task.actualEnd)} days` 
             : '-'}
-        </TableCell>
-        <TableCell>{task.progress}%</TableCell>
-        <TableCell>{task.clientSpoc}</TableCell>
-        <TableCell>{task.apSpoc}</TableCell>
-        <TableCell>{task.projectManager}</TableCell>
-        <TableCell>
+        </td>
+        <td className='text-sm border border-gray-300'>{task.progress}%</td>
+        <td className='text-sm border border-gray-300'>{task.clientSpoc}</td>
+        <td className='text-sm border border-gray-300'>{task.apSpoc}</td>
+        <td className='text-sm border border-gray-300'>{task.projectManager}</td>
+        <td className='text-sm border border-gray-300'>
           {task.assignments.map(assignment => (
             <div key={assignment.id} className="text-sm">
               {assignment.employeeName} ({assignment.percentage}%)
             </div>
           ))}
-        </TableCell>
-        <TableCell>
+        </td>
+        <td className='text-sm border border-gray-300'>
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
-              size="sm"
+              size="xs"
               onClick={() => setEditDialogOpen(true)}
             >
               <Edit2 className="w-4 h-4" />
             </Button>
             <Button
               variant="outline"
-              size="sm"
+              size="xs"
               onClick={() => setAssignDialogOpen(true)}
             >
               <UserPlus className="w-4 h-4" />
             </Button>
             <Button
               variant="destructive"
-              size="sm"
+              size="xs"
               onClick={() => onDelete(task.id)}
             >
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
-        </TableCell>
-      </TableRow>
+        </td>
+      </tr>
 
       <EditTaskDialog
         task={task}
@@ -108,3 +111,4 @@ export function TaskRow({
     </>
   );
 }
+
