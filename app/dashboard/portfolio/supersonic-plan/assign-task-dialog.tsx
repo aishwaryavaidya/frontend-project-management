@@ -20,9 +20,15 @@ interface AssignmentInput {
 }
 
 export function AssignTaskDialog({ task, open, onOpenChange, onAssign }: AssignTaskDialogProps) {
-  const [assignments, setAssignments] = useState<AssignmentInput[]>([
-    { employeeId: "", percentage: "100" }
-  ]);
+  // Initialize with existing assignments
+  const [assignments, setAssignments] = useState<AssignmentInput[]>(() => 
+    task.assignments.length > 0 
+      ? task.assignments.map(a => ({
+          employeeId: a.employeeId.toString(),
+          percentage: a.percentage.toString()
+        }))
+      : [{ employeeId: "", percentage: "100" }]
+  );
 
   const addAssignment = () => {
     setAssignments([...assignments, { employeeId: "", percentage: "" }]);
@@ -50,7 +56,7 @@ export function AssignTaskDialog({ task, open, onOpenChange, onAssign }: AssignT
       });
 
     if (validAssignments.length > 0) {
-      onAssign(validAssignments);
+      onAssign(validAssignments); // This will replace all existing assignments
       onOpenChange(false);
     }
   };
@@ -63,56 +69,67 @@ export function AssignTaskDialog({ task, open, onOpenChange, onAssign }: AssignT
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           {assignments.map((assignment, index) => (
-            <div key={index} className="flex items-center space-x-2">
-              <Select
-                value={assignment.employeeId}
-                onValueChange={(value) => {
-                  const newAssignments = [...assignments];
-                  newAssignments[index].employeeId = value;
-                  setAssignments(newAssignments);
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select employee" />
-                </SelectTrigger>
-                <SelectContent>
-                  {employees.map(employee => (
-                    <SelectItem key={employee.id} value={employee.id.toString()}>
-                      {employee.name} ({employee.role})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Input
-                type="number"
-                min="1"
-                max="100"
-                value={assignment.percentage}
-                onChange={(e) => {
-                  const newAssignments = [...assignments];
-                  newAssignments[index].percentage = e.target.value;
-                  setAssignments(newAssignments);
-                }}
-                placeholder="Percentage"
-                className="w-24"
-              />
-              {index > 0 && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => removeAssignment(index)}
+            <div key={index} className="flex items-center gap-2">
+              <div className="flex-1">
+                <Select
+                  value={assignment.employeeId}
+                  onValueChange={(value) => {
+                    const newAssignments = [...assignments];
+                    newAssignments[index].employeeId = value;
+                    setAssignments(newAssignments);
+                  }}
                 >
-                  <X className="w-4 h-4" />
-                </Button>
-              )}
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select employee" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {employees.map(employee => (
+                      <SelectItem key={employee.id} value={employee.id.toString()}>
+                        {employee.name} ({employee.role})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="w-24">
+                <Input
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={assignment.percentage}
+                  onChange={(e) => {
+                    const newAssignments = [...assignments];
+                    newAssignments[index].percentage = e.target.value;
+                    setAssignments(newAssignments);
+                  }}
+                  placeholder="%"
+                />
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => removeAssignment(index)}
+                disabled={assignments.length === 1}
+              >
+                <X className="w-4 h-4" />
+              </Button>
             </div>
           ))}
-          <Button type="button" variant="outline" onClick={addAssignment}>
+          
+          <Button
+            type="button"
+            variant="outline"
+            onClick={addAssignment}
+            className="w-full"
+          >
             <Plus className="w-4 h-4 mr-2" />
-            Add Assignment
+            Add Another Assignment
           </Button>
-          <Button type="submit">Save Assignments</Button>
+          
+          <Button type="submit" className="w-full">
+            Save Assignments
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
