@@ -341,8 +341,8 @@ export function SupersonicTable() {
               <th className="w-5"></th>
               <th className="w-5">Index</th>
               <th className="min-w-[200px]">Name</th>
-              <th className="w-32">Start Date</th>
-              <th className="w-32">End Date</th>
+              <th className="w-32">Baseline Start</th>
+              <th className="w-32">Baseline End</th>
               <th className="w-">Duration</th>
               <th className="w-32">Actual Start</th>
               <th className="w-32">Actual End</th>
