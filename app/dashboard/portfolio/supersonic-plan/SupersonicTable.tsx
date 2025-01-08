@@ -161,13 +161,10 @@ export function SupersonicTable() {
           if (task.id === taskId) {
             return {
               ...task,
-              assignments: [
-                ...task.assignments,
-                ...assignments.map((assignment, index) => ({
+              assignments: assignments.map((assignment, index) => ({
                   ...assignment,
                   id: Date.now() + index
                 }))
-              ]
             };
           }
           return task;
@@ -377,9 +374,9 @@ export function SupersonicTable() {
 
                     <td className="text-sm">{`M-${milestone.id}`}</td>
                     <td className="text-sm truncate ">{milestone.name}</td>
-                    {/* {Array(10).fill(null).map((_, i) => (
+                    {Array(10).fill(null).map((_, i) => (
                       <td key={i}></td>
-                    ))} */}
+                    ))}
                     <td>
                       <div className="flex items-center space-x-1">
                         <Button

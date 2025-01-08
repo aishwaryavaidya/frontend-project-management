@@ -8,7 +8,7 @@ import { calculateDuration } from '@/lib/utils';
 import { EditTaskDialog } from './edit-task-dialog';
 import { AssignTaskDialog } from './assign-task-dialog';
 import { Task, Assignment } from '@/types/types';
-
+import EmployeeAvatar from './EmployeeAvatar';
 interface TaskRowProps {
   task: Task;
   onUpdate: (task: Task) => void;
@@ -30,6 +30,7 @@ export function TaskRow({
   }: TaskRowProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
+
 
   return (
     <>
@@ -58,15 +59,14 @@ export function TaskRow({
             : '-'}
         </td>
         <td className='text-sm border border-gray-300'>{task.progress}%</td>
-        <td className='text-sm border border-gray-300'>{task.clientSpoc}</td>
-        <td className='text-sm border border-gray-300'>{task.apSpoc}</td>
-        <td className='text-sm border border-gray-300'>{task.projectManager}</td>
-        <td className='text-sm border border-gray-300'>
-          {task.assignments.map(assignment => (
-            <div key={assignment.id} className="text-sm">
-              {assignment.employeeName} ({assignment.percentage}%)
-            </div>
-          ))}
+        <td className='text-sm border border-gray-300 whitespace-nowrap text-ellipsis overflow-hidden'>{task.clientSpoc}</td>
+        <td className='text-sm border border-gray-300 whitespace-nowrap text-ellipsis overflow-hidden'>{task.apSpoc}</td>
+        <td className='text-sm border border-gray-300 whitespace-nowrap text-ellipsis overflow-hidden'>{task.projectManager}</td>
+        <td className='text-sm border border-gray-300 max-w-[100px] whitespace-nowrap text-ellipsis overflow-hidden'
+            onClick={()=>setAssignDialogOpen(true)}
+          >
+
+        <EmployeeAvatar assignments={task.assignments} />
         </td>
         <td className='text-sm border border-gray-300'>
           <div className="flex items-center space-x-2">
@@ -77,13 +77,13 @@ export function TaskRow({
             >
               <Edit2 className="w-4 h-4" />
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               size="xs"
               onClick={() => setAssignDialogOpen(true)}
             >
               <UserPlus className="w-4 h-4" />
-            </Button>
+            </Button> */}
             <Button
               variant="destructive"
               size="xs"
