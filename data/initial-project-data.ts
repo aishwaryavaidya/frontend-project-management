@@ -62,7 +62,7 @@ export const initialPhases: Phase[] = [
         apSpoc: "Bob Miller",
         tasks: [
           {
-            id: 3,
+            id: 2,
             index: "2.1",
             name: "Architecture Design",
             startDate: new Date(2024, 0, 16),
@@ -95,7 +95,7 @@ export const initialPhases: Phase[] = [
           {
             id: 3,
             index: "3.1",
-            name: "Architecture Design",
+            name: "System Communication",
             startDate: new Date(2024, 0, 16),
             endDate: new Date(2024, 0, 31),
             progress: 80,

@@ -372,8 +372,8 @@ export function SupersonicTable() {
                         </Button>
                     </td>
 
-                    <td className="text-sm">{`M-${milestone.id}`}</td>
-                    <td className="text-sm truncate ">{milestone.name}</td>
+                    <td className="text-sm font-semibold">{`M-${milestone.id}`}</td>
+                    <td className="text-sm truncate font-semibold">{milestone.name}</td>
                     {Array(10).fill(null).map((_, i) => (
                       <td key={i}></td>
                     ))}
