@@ -26,24 +26,25 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto max-w-4xl py-16 ">
-        <div className="hidden sm:mb-8 sm:flex sm:justify-center">
+      <div className="mx-auto max-w-4xl py-4 ">
+      <div className="hidden sm:mb-6 sm:flex sm:justify-center">
           <Announcement title="New Registration" href="/pages" />
         </div>
+        <h1 className="text-3xl mb-2 font-bold text-center justify-center tracking-tight text-gray-900 sm:text-6xl dark:text-white">Project Manager 24x7.</h1>
         <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+          <h1 className="text-2xl font-bold tracking-tight text-red-700 sm:text-2xl">
           Paperless, Zero-Touch, End to End Logistics Execution
           </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-600 mb-4">
+          <p className="mt-6 text-lg leading-8 text-gray-600 mb-4 dark:text-slate-300">
           99% of businesses have massive blind spots in their End-to-End Logistics Chain. Autoplants Logistics Excellence Platform rectifies that.
           </p>
           <CustomLinkButton title="Go to Dashboard" href="/dashboard/home/summary" />
-          <div className="pt-8 pb-4 flex items-center  justify-center gap-8">
+          <div className="pt-4 pb-4 flex items-center  justify-center gap-8">
             <div className="">
               <AnimatedAvatars />
             </div>
             <div className="">
-              <p className="dark:text-slate-900">200+ employees connected.</p>
+              <p className="dark:text-slate-100">200+ employees connected.</p>
             </div>
           </div>
         </div>

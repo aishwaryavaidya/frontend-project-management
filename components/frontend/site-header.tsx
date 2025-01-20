@@ -11,16 +11,27 @@ import { getInitials } from "@/lib/generateInitials";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/global/Logo";
+import {ChevronDown } from "lucide-react";
+import Image from 'next/image';
 import AuthenticatedAvatar from "@/components/global/AuthenticatedAvatar";
 
 export default function SiteHeader({ session }: { session: Session | null }) {
   const navigation = [
-    { name: "Projects", href: "/products" },
-    { name: "Tasks", href: "/solutions" },
-    { name: "Escalations", href: "/resources" },
-    { name: "Go-Live", href: "/docs" },
-    { name: "Portfolio", href: "/pricing" },
+    { name: "Home", href: "https://autoplant.in/home" },
+    { name: "About Us", href: "https://autoplant.in/about-us" },
+    { name: "Products", href: "#"},
+    { name: "Careers", href: "https://autoplant.in/careers" },
+    { name: "Contact Us", href: "https://autoplant.in/contact" },
   ];
+  const productLinks = [
+    { name: "Vendor Collaboration", href: "https://autoplant.in/vc" },
+    { name: "In-Plant Logistics", href: "https://autoplant.in/inplant" },
+    { name: "Enroute", href: "https://autoplant.in/enroute" },
+    { name: "Freight Settlement", href: "https://autoplant.in/freight" },
+    { name: "Auction", href: "https://autoplant.in/auction" },
+  ];
+
+  
   const router = useRouter();
 
   async function handleLogout() {
@@ -33,15 +44,17 @@ export default function SiteHeader({ session }: { session: Session | null }) {
   }
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <header className="sticky inset-x-0 top-8 lg:top-5 z-50">
+    <header className="sticky inset-x-0 top-0 lg:top-0 z-40">
       <nav
         aria-label="Global"
-        className="flex items-center justify-between p-6 lg:px-8 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+        className="flex items-center justify-between p-4 lg:px-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
       >
         <div className="flex lg:flex-1">
-          <Logo title="Project Manager" href="/" />
+          <span><Logo title="PM" href="#" /></span>
+          
         </div>
         <div className="flex lg:hidden">
           <button
@@ -53,16 +66,42 @@ export default function SiteHeader({ session }: { session: Session | null }) {
             <Bars3Icon aria-hidden="true" className="h-6 w-6" />
           </button>
         </div>
-        <div className="hidden lg:flex lg:gap-x-12">
+        <div className="hidden lg:flex lg:gap-x-14">
           {navigation.map((item) => (
+            item.name === "Products" ? (
+              <div
+                key={item.name}
+                className="relative flex items-center space-x-1 cursor-pointer group"
+                onMouseEnter={() => setDropdownOpen(true)}
+                onMouseLeave={() => setDropdownOpen(false)}
+              >
+                <span className="text-lg font-semibold leading-6 text-gray-900 dark:text-gray-100 group-hover:text-gray-700 dark:group-hover:text-gray-300">
+                  {item.name}
+                </span>
+                <ChevronDown className="h-4 w-4 text-gray-900 dark:text-gray-100 group-hover:text-gray-700 dark:group-hover:text-gray-300" />
+                {dropdownOpen && (
+                  <div className="absolute top-full left-0 mt-0 hidden group-hover:block w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
+                    {productLinks.map((link) => (
+                      <Link
+                        key={link.name}
+                        href={link.href}
+                        className="block px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        {link.name}
+                      </Link>
+                    ))}
+                  </div>
+                  )}
+                  </div>
+                ) : (
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300"
+              className="text-lg font-semibold leading-6 text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300"
             >
               {item.name}
             </Link>
-          ))}
+          )))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-2">
           <ModeToggle />
