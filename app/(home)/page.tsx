@@ -28,7 +28,7 @@ export default async function Home() {
     <main className="min-h-screen">
       <div className="mx-auto max-w-4xl py-4 ">
       <div className="hidden sm:mb-6 sm:flex sm:justify-center">
-          <Announcement title="New Registration" href="/pages" />
+          <Announcement title="Track Your Projects" href="/login" />
         </div>
         <h1 className="text-3xl mb-2 font-bold text-center justify-center tracking-tight text-gray-900 sm:text-6xl dark:text-white">Project Manager 24x7.</h1>
         <div className="text-center">

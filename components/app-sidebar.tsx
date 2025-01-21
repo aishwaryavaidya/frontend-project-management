@@ -10,7 +10,7 @@ import {
   Frame,
   NotebookPen,
   Map,
-  PieChart,
+  MessageCircle,
   Settings2,
   HomeIcon,
 } from "lucide-react"
@@ -187,11 +187,11 @@ const data = {
     },
   ],
   projects: [
-    // {
-    //   name: "Design Engineering",
-    //   url: "#",
-    //   icon: Frame,
-    // },
+    {
+      name: "Chats",
+      url: "/dashboard/chat",
+      icon: MessageCircle,
+    },
     // {
     //   name: "Sales & Marketing",
     //   url: "#",
@@ -213,7 +213,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
+        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

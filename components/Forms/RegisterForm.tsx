@@ -54,7 +54,7 @@ export default function RegisterForm() {
       <div className="">
         <div className="py-4 text-gray-900">
           <h2 className="text-xl lg:text-2xl font-bold leading-9 tracking-tight  ">
-            Create an account
+            Create an account 
           </h2>
           <p className="text-xs">Join Us, fill in details to login</p>
         </div>
@@ -68,7 +68,7 @@ export default function RegisterForm() {
               label="First Name"
               name="firstName"
               icon={User}
-              placeholder="first Name"
+              placeholder="First Name"
             />
             <TextInput
               register={register}
@@ -76,7 +76,7 @@ export default function RegisterForm() {
               label="Last Name"
               name="lastName"
               icon={User}
-              placeholder="last Name"
+              placeholder="Last Name"
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -86,7 +86,7 @@ export default function RegisterForm() {
               label="Phone"
               name="phone"
               icon={Headset}
-              placeholder="phone"
+              placeholder="+91|Phone"
             />
             <div className="">
               <TextInput
@@ -104,15 +104,30 @@ export default function RegisterForm() {
             </div>
           </div>
 
-          <PasswordInput
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <TextInput
+                type="employeeid"
+                register={register}
+                errors={errors}
+                label="Employee Id"
+                name="employeeId"
+                icon={User}
+                placeholder="e.g. AP0649"
+              />
+
+            <div className="">
+            <PasswordInput
             register={register}
             errors={errors}
             label="Password"
             name="password"
             icon={Lock}
-            placeholder="password"
+            placeholder="Password"
             type="password"
           />
+            </div>
+          </div>
+          
           <div>
             <SubmitButton
               title="Sign Up"
@@ -125,11 +140,11 @@ export default function RegisterForm() {
           </div>
         </form>
 
-        <div className="flex items-center py-4 justify-center space-x-1 text-slate-900">
+        {/* <div className="flex items-center py-4 justify-center space-x-1 text-slate-900">
           <div className="h-[1px] w-full bg-slate-200"></div>
           <div className="uppercase">Or</div>
           <div className="h-[1px] w-full bg-slate-200"></div>
-        </div>
+        </div> */}
 
         {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Button

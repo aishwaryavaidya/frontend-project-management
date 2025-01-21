@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from 'next/link' 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -27,14 +28,15 @@ import { UserPlus } from 'lucide-react';
 import { generateRandomColor } from '@/lib/utils';
 import { AddTaskDialog } from './add-task-dialog';
 import { BulkOperationsDialog } from './bulk-operations/bulk-operations-dialog';
-
-
+import { RaidDialog } from '../../project/RAID/raid-dialog';
 
 
 
 // ... (interfaces remain the same, add actualDuration to Task and Milestone)
 
 export function SupersonicTable() {
+
+  const [raidDialogOpen, setRaidDialogOpen] = useState(false); ///raid
 
   const [phases, setPhases] = useState<Phase[]>(initialPhases);
 
@@ -277,6 +279,12 @@ export function SupersonicTable() {
       <div className="flex justify-between mb-4">
         <h1 className="text-2xl font-bold">Project Supersonic</h1>
         <div className="space-x-2">
+          <Button 
+            variant={"outline"} 
+            className="px-2 bg-red-500 text-white font-semibold"
+            size="sm">
+              <Link href="/../../dashboard/project/RAID">RAID Log</Link>
+            </Button>
           <Button
             variant="outline"
             size="sm"
@@ -331,6 +339,7 @@ export function SupersonicTable() {
           </Button>
         </div>
       </div>
+
   
       {/* Table */}
       <div className="border rounded-lg">

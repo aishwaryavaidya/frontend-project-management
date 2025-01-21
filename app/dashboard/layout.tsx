@@ -1,5 +1,10 @@
 import React from 'react'
 import { AppSidebar } from "@/components/app-sidebar"
+import AuthenticatedAvatar from '@/components/global/AuthenticatedAvatar'
+import { Session } from 'next-auth'
+import { Button} from '@/components/ui/button'
+import { ChatPage } from './chat/ChatPage'
+import Link from 'next/link' 
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,9 +20,10 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { ModeToggle } from '@/components/mode-toggle'
+import { ChatBox } from './chat/ChatBox'
 
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children, session }: { children: React.ReactNode;   session: Session | null;}) {
   return (
     <SidebarProvider>
     <AppSidebar className="flex z-40"/>
@@ -40,11 +46,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </BreadcrumbList>
           </Breadcrumb>
           <div className='fixed right-4'>
-          <ModeToggle />
+            <span className="px-2"><ChatBox /></span>
+            <span className="px-2"><ModeToggle /></span>
+            <span>
+            {session ? (
+              <AuthenticatedAvatar session={session} />
+            ) : (
+              <Button asChild variant={"outline"} className="px-2 bg-red-500 text-white font-semibold">
+                <Link href="/login">Log in</Link>
+              </Button>
+            )}
+            </span>
           </div>
+          
         </div>
       </header>
-      <main>{children}</main>
+      <main>
+        {children}
+      </main>
     </SidebarInset>
   </SidebarProvider>
   )

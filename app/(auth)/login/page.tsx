@@ -9,7 +9,7 @@ import React from "react";
 export default async function page() {
   const session = await getServerSession(authOptions);
   if (session) {
-    redirect("/dashboard");
+    redirect("/dashboard/summary");
   }
   return (
     <section>

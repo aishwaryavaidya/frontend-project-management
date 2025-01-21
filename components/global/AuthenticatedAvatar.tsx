@@ -13,11 +13,9 @@ import { Session } from "next-auth";
 import Link from "next/link";
 import LogoutBtn from "@/components/global/LogoutBtn";
 
-export default function AuthenticatedAvatar({
-  session,
-}: {
-  session: Session | null;
-}) {
+export default function AuthenticatedAvatar({session,}: {session: Session | null}) //typescript check that session can either be an instance of Session object or null
+{
+  const userInitials = getInitials(session?.user?.name || "");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer" asChild>
@@ -26,7 +24,7 @@ export default function AuthenticatedAvatar({
             src={session?.user.image ?? ""}
             alt={session?.user.name ?? ""}
           />
-          <AvatarFallback>{getInitials(session?.user?.name)}</AvatarFallback>
+          <AvatarFallback>{userInitials}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
