@@ -219,7 +219,7 @@ export function RaidTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[25px]">ID</TableHead>
+              <TableHead className="w-[10px]">ID</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Probability%</TableHead>

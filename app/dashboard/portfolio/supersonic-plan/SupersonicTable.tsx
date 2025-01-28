@@ -28,7 +28,7 @@ import { UserPlus } from 'lucide-react';
 import { generateRandomColor } from '@/lib/utils';
 import { AddTaskDialog } from './add-task-dialog';
 import { BulkOperationsDialog } from './bulk-operations/bulk-operations-dialog';
-import { RaidDialog } from '../../project/RAID/raid-dialog';
+// import { RaidDialog } from '../../project/RAID/raid-dialog';
 
 
 
@@ -273,12 +273,12 @@ export function SupersonicTable() {
   
 
   // ... (other functions remain the same)
-
+// ********************************************************
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between mb-4">
-        <h1 className="text-2xl font-bold">Project Supersonic</h1>
-        <div className="space-x-2">
+        <h1 className="text-2xl font-bold mb-25">Project Supersonic</h1>
+        <div className="space-x-2 mt-20">
           <Button 
             variant={"outline"} 
             className="px-2 bg-red-500 text-white font-semibold"
