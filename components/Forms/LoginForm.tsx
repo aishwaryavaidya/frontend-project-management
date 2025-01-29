@@ -13,6 +13,7 @@ import { Button } from "../ui/button";
 import TextInput from "../FormInputs/TextInput";
 import PasswordInput from "../FormInputs/PasswordInput";
 import SubmitButton from "../FormInputs/SubmitButton";
+import Image from "next/image";
 
 
 export default function LoginForm() {
@@ -60,11 +61,18 @@ export default function LoginForm() {
     }
   }
   return (
-    <div className="w-full py-5 lg:px-8 px-6 ">
+    <div className="w-full py-5 lg:px-8 px-6 mb-8">
       <div className="">
-        <div className="py-4 text-gray-900">
-          <h2 className="text-xl lg:text-2xl font-bold leading-9 tracking-tight  ">
-            Login in to your account
+        <div className="ml-20">
+        <Image 
+                    src="https://autoplant.in/assets/img/logoautoplant.svg"
+                    alt="" 
+                    width={200}
+                    height={50}/>
+        </div>
+        <div className="py-4 text-gray-900 justify-between items-center dark:text-gray-50">
+          <h2 className="text-xl lg:text-xl font-bold leading-9 tracking-tight  ">
+            Sign in to Dashboard
           </h2>
           <p className="text-xs">Welcome Back, fill in details to login</p>
         </div>
@@ -100,11 +108,11 @@ export default function LoginForm() {
             />
           </div>
         </form>
-        <div className="flex items-center py-4 justify-center space-x-1 text-slate-900">
+        {/* <div className="flex items-center py-4 justify-center space-x-1 text-slate-900">
           <div className="h-[1px] w-full bg-slate-200"></div>
           <div className="uppercase">Or</div>
           <div className="h-[1px] w-full bg-slate-200"></div>
-        </div>
+        </div> */}
 
         {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Button

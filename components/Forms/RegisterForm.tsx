@@ -12,6 +12,7 @@ import TextInput from "../FormInputs/TextInput";
 import PasswordInput from "../FormInputs/PasswordInput";
 import SubmitButton from "../FormInputs/SubmitButton";
 import { Button } from "../ui/button";
+import Image from "next/image";
 // import { FaGithub, FaGitter, FaGoogle } from "react-icons/fa";
 import { createUser } from "@/actions/users";
 import { signIn } from "next-auth/react";
@@ -50,9 +51,16 @@ export default function RegisterForm() {
     }
   }
   return (
-    <div className="w-full py-5 lg:px-8 px-6">
+    <div className="w-full py-5 lg:px-8 px-6 dark:bg-neutral-900 dark:text-gray-50">
+      <div className="flex justify-center items-center">
+      <Image 
+            src="https://autoplant.in/assets/img/logoautoplant.svg"
+            alt="" 
+            width={200}
+            height={50}/>
+      </div>
       <div className="">
-        <div className="py-4 text-gray-900">
+        <div className="py-4 ">
           <h2 className="text-xl lg:text-2xl font-bold leading-9 tracking-tight  ">
             Create an account 
           </h2>
@@ -60,8 +68,8 @@ export default function RegisterForm() {
         </div>
       </div>
       <div className="">
-        <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form className="space-y-3 dark:text-white-100" onSubmit={handleSubmit(onSubmit) }>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
             <TextInput
               register={register}
               errors={errors}
@@ -165,7 +173,7 @@ export default function RegisterForm() {
           </Button>
         </div> */}
 
-        <p className="mt-6 text-left text-sm text-gray-500">
+        <p className="mt-6 text-left text-sm text-gray-500 dark:text-gray-50">
           Alrealy Registered ?{" "}
           <Link
             href="/login"

@@ -7,7 +7,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { CircleHelp, Mail } from "lucide-react";
+import { CircleHelp } from "lucide-react";
+
 type TextInputProps = {
   register: any;
   errors: any;
@@ -19,6 +20,7 @@ type TextInputProps = {
   placeholder?: string;
   icon?: any;
 };
+
 export default function TextInput({
   register,
   errors,
@@ -33,10 +35,11 @@ export default function TextInput({
   const Icon = icon;
   return (
     <div>
+      {/* Label Section */}
       <div className="flex space-x-2 items-center">
         <label
           htmlFor={name}
-          className="block text-sm font-medium leading-6 text-gray-900"
+          className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100"
         >
           {label}
         </label>
@@ -45,21 +48,23 @@ export default function TextInput({
             <Tooltip>
               <TooltipTrigger asChild>
                 <button>
-                  <CircleHelp className="w-4 h-4 text-slate-500" />
+                  <CircleHelp className="w-4 h-4 text-slate-500 dark:text-gray-400" />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{toolTipText}</p>
+                <p className="text-gray-700 dark:text-gray-200">{toolTipText}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         )}
       </div>
+
+      {/* Input Section */}
       <div className="mt-2">
-        <div className="relative rounded-md ">
+        <div className="relative rounded-md">
           {icon && (
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <Icon className="text-slate-300 w-4 h-4" />
+              <Icon className="text-slate-400 dark:text-gray-500 w-4 h-4" />
             </div>
           )}
           <input
@@ -67,20 +72,24 @@ export default function TextInput({
             type={type}
             {...register(`${name}`, { required: true })}
             className={cn(
-              "block w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 text-sm",
-              (errors[`${name}`] && "focus:ring-red-500 pl-8") ||
-                (icon && "pl-8")
+              "block w-full rounded-md border-0 py-2 shadow-sm sm:text-sm sm:leading-6",
+              "ring-1 ring-inset placeholder:text-gray-400 text-gray-900 dark:text-gray-200",
+              "bg-white dark:bg-neutral-900 ring-gray-300 dark:ring-gray-700",
+              "focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-indigo-400",
+              (errors[`${name}`] && "focus:ring-red-500 pl-8") || (icon && "pl-8")
             )}
             placeholder={placeholder || label}
           />
           {unit && (
-            <p className="bg-white py-2 px-3 rounded-tr-md rounded-br-md absolute inset-y-0 right-1 my-[2px] flex items-center">
+            <p className="bg-gray-100 dark:bg-neutral-800 text-gray-900 dark:text-gray-200 py-2 px-3 rounded-tr-md rounded-br-md absolute inset-y-0 right-1 my-[2px] flex items-center">
               {unit}
             </p>
           )}
         </div>
         {errors[`${name}`] && (
-          <span className="text-xs text-red-600">{label} is required</span>
+          <span className="text-xs text-red-600 dark:text-red-400">
+            {label} is required
+          </span>
         )}
       </div>
     </div>
