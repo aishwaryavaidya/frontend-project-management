@@ -6,7 +6,7 @@ import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
 import "./ProjectGanttChart.css"; // Add custom styles
 import { Phase } from "./Data";
 import projectData from "./Data";
-import { configureGanttSettings } from "@/lib/ganttConfig";
+import { configureGanttSettings } from "@/lib/utils/ganttConfig";
 
 const ProjectGanttChart = () => {
     useEffect(() => {

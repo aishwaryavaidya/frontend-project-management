@@ -1,6 +1,6 @@
 "use client";
 import { CardStack } from "../ui/card-stack";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 export function Testimonials() {
   return (
     <div className="h-[22rem] flex items-center justify-center w-full">

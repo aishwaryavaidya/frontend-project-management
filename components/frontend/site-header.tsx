@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Session } from "next-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "@/lib/generateInitials";
+import { getInitials } from "@/lib/utils/generateInitials";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/global/Logo";

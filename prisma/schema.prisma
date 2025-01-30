@@ -7,9 +7,98 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// model Account {
+//   id                String  @id @default(uuid()) @map("_id") // Use UUID for unique IDs in MySQL
+//   userId            String
+//   type              String
+//   provider          String
+//   providerAccountId String
+//   refresh_token     String?
+//   access_token      String?
+//   expires_at        Int?
+//   token_type        String?
+//   scope             String?
+//   id_token          String?
+//   session_state     String?
+
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   @@unique([provider, providerAccountId])
+// }
+
+// model Session {
+//   id           String   @id @default(uuid()) @map("_id") // Use UUID for unique IDs in MySQL
+//   sessionToken String   @unique
+//   userId       String
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// }
+
+// enum UserRole {
+//   USER
+//   ADMIN
+//   SERVICE_PROVIDER
+// }
+
+// model User {
+//   id            String    @id @default(uuid()) @map("_id") // Use UUID for unique IDs in MySQL
+//   name          String
+//   firstName     String
+//   lastName      String
+//   phone         String
+//   email         String    @unique
+//   emailVerified DateTime?
+//   image         String?
+//   role          UserRole  @default(USER)
+//   password      String?
+//   status        Boolean   @default(true)
+//   accounts      Account[]
+//   sessions      Session[]
+//   isVerified    Boolean   @default(false)
+//   token         Int?
+//   createdAt     DateTime  @default(now())
+//   updatedAt     DateTime  @updatedAt
+// }
+
+// model Category {
+//   id          String  @id @default(uuid()) @map("_id") // Use UUID for unique IDs in MySQL
+//   title       String
+//   slug        String  @unique
+//   imageUrl    String?
+//   description String?
+
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime? @updatedAt
+// }
+
+enum Role {
+  ADMIN
+  USER
+  PROGRAM_MANAGER
+  PROJECT_MANAGER
+  SUPER_USER
+}
+
+model User {
+  id            String    @id @default(uuid())
+  firstName     String
+  lastName      String
+  email         String    @unique
+  password      String
+  phone         String?
+  employeeId    String    @unique
+  role          Role      @default(USER)
+  emailVerified DateTime?
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
 model Account {
-  id                String  @id @default(uuid()) @map("_id") // Use UUID for unique IDs in MySQL
+  id                String  @id @default(uuid())
   userId            String
+  user              User    @relation(fields: [userId], references: [id])
   type              String
   provider          String
   providerAccountId String
@@ -21,54 +110,23 @@ model Account {
   id_token          String?
   session_state     String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   @@unique([provider, providerAccountId])
 }
 
 model Session {
-  id           String   @id @default(uuid()) @map("_id") // Use UUID for unique IDs in MySQL
+  id           String   @id @default(uuid())
   sessionToken String   @unique
   userId       String
+  user         User     @relation(fields: [userId], references: [id])
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-enum UserRole {
-  USER
-  ADMIN
-  SERVICE_PROVIDER
-}
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-model User {
-  id            String    @id @default(uuid()) @map("_id") // Use UUID for unique IDs in MySQL
-  name          String
-  firstName     String
-  lastName      String
-  phone         String
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  role          UserRole  @default(USER)
-  password      String?
-  status        Boolean   @default(true)
-  accounts      Account[]
-  sessions      Session[]
-  isVerified    Boolean   @default(false)
-  token         Int?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-}
-
-model Category {
-  id          String  @id @default(uuid()) @map("_id") // Use UUID for unique IDs in MySQL
-  title       String
-  slug        String  @unique
-  imageUrl    String?
-  description String?
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  @@unique([identifier, token])
 }
 
 //supersonic

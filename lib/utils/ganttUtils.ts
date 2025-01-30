@@ -1,4 +1,4 @@
-import { Phase, Milestone, Task } from '../app/dashboard/project/plan/Data';
+import { Phase, Milestone, Task } from '../../app/dashboard/project/plan/Data';
 
 interface GanttTask {
   id: string;

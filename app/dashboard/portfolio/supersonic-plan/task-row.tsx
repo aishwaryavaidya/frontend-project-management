@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 // import { TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Trash2, Edit2, UserPlus } from 'lucide-react';
-import { calculateDuration } from '@/lib/utils';
+import { calculateDuration } from '@/lib/utils/utils';
 import { EditTaskDialog } from './edit-task-dialog';
 import { AssignTaskDialog } from './assign-task-dialog';
 import { Task, Assignment } from '@/types/types';

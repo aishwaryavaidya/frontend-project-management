@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "@/lib/generateInitials";
+import { getInitials } from "@/lib/utils/generateInitials";
 import React from "react";
 
 interface EmployeeAvatarProps {

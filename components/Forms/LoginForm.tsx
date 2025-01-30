@@ -1,5 +1,5 @@
 "use client";
-import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import { Loader2, Lock, Mail } from "lucide-react";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -8,8 +8,6 @@ import { LoginProps } from "@/types/types";
 import toast from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Button } from "../ui/button";
-// import { FaGithub, FaGoogle } from "react-icons/fa";
 import TextInput from "../FormInputs/TextInput";
 import PasswordInput from "../FormInputs/PasswordInput";
 import SubmitButton from "../FormInputs/SubmitButton";
