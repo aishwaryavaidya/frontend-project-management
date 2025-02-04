@@ -1,0 +1,115 @@
+// app/RAID/[projectId]/raid/components/ActionItemsModal.tsx
+
+"use client"
+
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Checkbox } from '@/components/ui/checkbox'
+import { PlusIcon, TrashIcon } from 'lucide-react'
+import type { ActionItem } from '@/types/raid'
+import { cn } from '@/lib/utils'
+
+export function ActionItemsModal({
+  items,
+  onSave
+}: {
+  items: ActionItem[]
+  onSave: (newItems: ActionItem[]) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const [localItems, setLocalItems] = useState([...items])
+
+  return (
+    <>
+      <Button 
+        variant="ghost" 
+        size="sm" 
+        onClick={() => setOpen(true)}
+        className="hover:bg-primary/10 transition-colors"
+      >
+        View Items
+      </Button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-2xl animate-slide-in sm:max-w-[600px] p-0 gap-0 overflow-hidden">
+          <div className="backdrop-blur-sm bg-background/95 p-6 shadow-lg">
+            <DialogHeader className="pb-4 border-b">
+              <DialogTitle className="text-xl font-semibold">Action Items</DialogTitle>
+            </DialogHeader>
+            
+            <div className="space-y-4 mt-4">
+              <div className="space-y-3">
+                {localItems.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className="flex items-center gap-3 group p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                  >
+                    <Checkbox
+                      checked={item.completed}
+                      onCheckedChange={(checked: boolean) => {
+                        const newItems = [...localItems]
+                        newItems[index].completed = checked
+                        setLocalItems(newItems)
+                      }}
+                      className="h-5 w-5 rounded-md border-2 data-[state=checked]:bg-primary/90"
+                    />
+                    <Input
+                      value={item.item}
+                      onChange={e => {
+                        const newItems = [...localItems]
+                        newItems[index].item = e.target.value
+                        setLocalItems(newItems)
+                      }}
+                      placeholder="Action item description"
+                      className={cn(
+                        "flex-1 transition-all border-muted focus:ring-2 focus:ring-primary/20",
+                        "bg-transparent hover:bg-background"
+                      )}
+                    />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setLocalItems(localItems.filter((_, i) => i !== index))}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/10 hover:text-destructive"
+                    >
+                      <TrashIcon className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+
+              <Button
+                variant="outline"
+                onClick={() => setLocalItems([...localItems, { item: '', completed: false }])}
+                className="w-full hover:bg-primary/5 hover:text-primary transition-colors border-dashed"
+              >
+                <PlusIcon className="mr-2 h-4 w-4" /> Add Item
+              </Button>
+
+              <div className="flex justify-end gap-2 pt-4 border-t mt-6">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setOpen(false)}
+                  className="hover:bg-muted/50 transition-colors"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={() => {
+                    onSave(localItems)
+                    setOpen(false)
+                  }}
+                  className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary transition-all shadow-sm hover:shadow-lg"
+                >
+                  Save Changes
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}

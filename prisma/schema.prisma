@@ -199,3 +199,44 @@ model Assignment {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+//RAID
+
+model Project {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  raidItems   RAIDItem[]
+}
+
+model RAIDItem {
+  id               String    @id @default(uuid())
+  projectId        String
+  project          Project   @relation(fields: [projectId], references: [id])
+  milestoneNo      Int?
+  dateRaised       DateTime?
+  type             String?
+  sprintDate       DateTime?
+  category         String?
+  probability      Int?
+  preventiveAction String?
+  status           String?
+  impact           String?
+  priority         String?
+  confirmedBy      String?
+  confirmationDate DateTime?
+  mitigationPlan   Json?
+  owner            String?
+  dateClosed       DateTime?
+  activitiesLog    Json?
+  actionItems      Json?
+  assignedTo       String?
+  assignedOn       DateTime?
+  remarks          Json?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([projectId])
+}

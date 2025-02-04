@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import Marquee from "@/components/magicui/marquee";
 import SectionHeading from "../global/SectionHeading";
 

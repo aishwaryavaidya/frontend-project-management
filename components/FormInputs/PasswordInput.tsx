@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import {
   Tooltip,
