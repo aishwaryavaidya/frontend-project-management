@@ -25,8 +25,8 @@ import { ChatBox } from './chat/ChatBox'
 
 export default function Layout({ children, session }: { children: React.ReactNode;   session: Session | null;}) {
   return (
-    <SidebarProvider>
-    <AppSidebar className="flex z-40"/>
+    <SidebarProvider >
+    <AppSidebar/>
     <SidebarInset>
       <header className="flex z-30 bg-white h-11 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-10 sticky top-0 z-30 dark:bg-black">
         <div className="flex  items-center gap-2 px-4">
@@ -36,12 +36,12 @@ export default function Layout({ children, session }: { children: React.ReactNod
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink href="/dashboard/summary">
-                  Dashboard
+                  Summary Dashboard
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Summary</BreadcrumbPage>
+                <BreadcrumbPage>Project</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

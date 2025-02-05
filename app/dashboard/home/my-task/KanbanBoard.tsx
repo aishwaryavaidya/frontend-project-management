@@ -217,8 +217,8 @@ export function KanbanBoard() {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+    <div className="p-5">
+      <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent text-center text-4xl">
         My Tasks
       </h1>
       

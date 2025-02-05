@@ -13,6 +13,7 @@ import {
   MessageCircle,
   Settings2,
   HomeIcon,
+  LockKeyhole
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -46,33 +47,21 @@ const data = {
       plan: "Private access",
     },
   ],
+
+
   navMain: [
-
-
     {
       title: "Dashboard",
       url: "#",
       icon: ActivityIcon,
       items: [
         {
+          title: "Summary Overview",
+          url: "dashboard/summary",
+        },
+        {
           title: "Project Overview",
-          url: "dashboard/project/overview",
-        },
-        {
-          title: "Project Plan",
-          url: "project/plan",
-        },
-        {
-          title: "Project resource",
-          url: "project/resource",
-        },
-        {
-          title: "RAID",
-          url: "dashboard/project/RAID",
-        },
-        {
-          title: "RYG",
-          url: "/project/RYG",
+          url: "/dashboard/project/plan",
         },
       ],
     },
@@ -83,21 +72,17 @@ const data = {
       icon: HomeIcon,
       isActive: true,
       items: [
+        // {
+        //   title: "Summary",
+        //   url: "/dashboard/home/summary",
+        // },
         {
-          title: "Summary",
-          url: "/dashboard/home/summary",
-        },
-        {
-          title: "My Task",
+          title: "Task Kanban",
           url: "/dashboard/home/my-task",
         },
         {
           title: "Task Calendar",
           url: "/dashboard/home/task-calendar",
-        },
-        {
-          title: "Kanban View",
-          url: "/dashboard/home/kanban",
         },
       ],
     },
@@ -107,7 +92,7 @@ const data = {
       icon: Briefcase,
       items: [
         {
-          title: "Customer Site",
+          title: "My Projects",
           url: "/dashboard/portfolio/customer-site",
         },
         {
@@ -117,6 +102,14 @@ const data = {
         {
           title: "Supersonic plan",
           url: "/dashboard/portfolio/supersonic-plan",
+        },
+        {
+          title: "RAID Log",
+          url: "/RAID/6340c2bb-eb17-471d-a5e4-4be19e4a9b53/raid",
+        },
+        {
+          title: "KPI Tracker",
+          url: "/dashboard/project/KPI",
         },
       ],
     },
@@ -192,11 +185,11 @@ const data = {
       url: "/dashboard/chat",
       icon: MessageCircle,
     },
-    // {
-    //   name: "Sales & Marketing",
-    //   url: "#",
-    //   icon: PieChart,
-    // },
+    {
+      name: "Admin Role Management",
+      url: "/admin/users",
+      icon: LockKeyhole,
+    },
     // {
     //   name: "Travel",
     //   url: "#",
