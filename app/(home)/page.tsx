@@ -35,11 +35,11 @@ export default async function Home() {
           <h1 className="text-2xl font-bold tracking-tight text-red-700 sm:text-2xl">
           Paperless, Zero-Touch, End to End Logistics Execution
           </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-600 mb-4 dark:text-slate-300">
+          <p className="mt-6 text-lg leading-8 text-gray-600 mb-6 dark:text-slate-300">
           99% of businesses have massive blind spots in their End-to-End Logistics Chain. Autoplants Logistics Excellence Platform rectifies that.
           </p>
-          <CustomLinkButton title="Go to Dashboard" href="/dashboard/home/summary" />
-          <div className="pt-4 pb-4 flex items-center  justify-center gap-8">
+          <CustomLinkButton title="Go to Dashboard" href="/dashboard/summary" />
+          <div className="pt-4 pb-4 flex items-center  justify-center gap-8 mt-6">
             <div className="">
               <AnimatedAvatars />
             </div>
