@@ -207,7 +207,7 @@ export function RaidTable2({ raids, projectId, onEdit }: RaidTableProps) {
             {raids.map((item, index) => (
               <tr key={item.id} className="border-t hover:bg-muted/50">
                 {/* Index Number */}
-                <td className="p-2 text-center">{index + 1}</td>
+                <td className="p-2 text-center">{index + 1}.</td>
                 {/* Milestone No */}
                 <td className="p-2">
                   {editingId === item.id ? (
@@ -400,10 +400,13 @@ export function RaidTable2({ raids, projectId, onEdit }: RaidTableProps) {
                   {renderModalButton('Plan', item.mitigationPlan, 'mitigation', item.id)}
                   {openedModal?.type === 'mitigation' && openedModal.id === item.id && (
                     <MitigationPlanModal
+                    open={true}
+                    onClose={() => setOpenedModal(null)}
                     plan={editingId === item.id ? editedData.mitigationPlan ?? item.mitigationPlan : item.mitigationPlan}
-                    onSave={(newPlan) => {
-                        handleEdit(item.id, 'mitigationPlan', newPlan);
-                        saveField(item.id, 'mitigationPlan', newPlan);
+                    onSave={async (newPlan) => {
+                        await handleEdit(item.id, 'mitigationPlan', newPlan);
+                        await saveField(item.id, 'mitigationPlan', newPlan);
+                        setOpenedModal(null);
                     }}
                     />
                   )}
@@ -441,6 +444,8 @@ export function RaidTable2({ raids, projectId, onEdit }: RaidTableProps) {
                   {renderModalButton('Activities', item.activitiesLog, 'activities', item.id)}
                   {openedModal?.type === 'activities' && openedModal.id === item.id && (
                     <ActivitiesModal
+                    open={true}
+                    onClose={() => setOpenedModal(null)}
                     activities={editingId === item.id ? editedData.activitiesLog ?? item.activitiesLog : item.activitiesLog}
                     onSave={(newActivities) => {
                       handleEdit(item.id, 'activitiesLog', newActivities);
@@ -455,6 +460,8 @@ export function RaidTable2({ raids, projectId, onEdit }: RaidTableProps) {
                   {renderModalButton('Actions', item.actionItems, 'actions', item.id)}
                   {openedModal?.type === 'actions' && openedModal.id === item.id && (
                     <ActionItemsModal
+                    open={true}
+                    onClose={() => setOpenedModal(null)}
                     items={editingId === item.id ? editedData.actionItems ?? item.actionItems : item.actionItems}
                     onSave={(newItems) => {
                       handleEdit(item.id, 'actionItems', newItems);
@@ -489,6 +496,8 @@ export function RaidTable2({ raids, projectId, onEdit }: RaidTableProps) {
                   {renderModalButton('Remarks', item.remarks, 'remarks', item.id)}
                   {openedModal?.type === 'remarks' && openedModal.id === item.id && (
                     <RemarksModal
+                    open={true}
+                    onClose={() => setOpenedModal(null)}
                     remarks={editingId === item.id ? editedData.remarks ?? item.remarks : item.remarks}
                     onSave={(newRemarks) => {
                       handleEdit(item.id, 'remarks', newRemarks);
