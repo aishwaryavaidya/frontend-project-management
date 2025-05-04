@@ -21,7 +21,21 @@ import {
 } from "@/components/ui/sidebar"
 import { ModeToggle } from '@/components/mode-toggle'
 import { ChatBox } from './chat/ChatBox'
+import { Metadata } from "next"
+import { initializeData } from '@/lib/init-data'
 
+// Initialize database with sample data if needed
+// This runs on the server during startup
+initializeData().then(() => {
+  console.log('Database initialization completed for dashboard');
+}).catch(error => {
+  console.error('Error during data initialization:', error);
+});
+
+export const metadata: Metadata = {
+  title: 'Dashboard - Project Management System',
+  description: 'Dashboard for managing projects, tasks, and resources',
+}
 
 export default function Layout({ children, session }: { children: React.ReactNode;   session: Session | null;}) {
   return (

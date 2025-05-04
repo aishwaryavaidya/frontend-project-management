@@ -1,6 +1,430 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+async function seedModules() {
+  const defaultModules = [
+    { name: 'VC' },
+    { name: 'Inplant-IB' },
+    { name: 'Inplant-OB' },
+    { name: 'Enroute' },
+    { name: 'EpoD' },
+  ];
+
+  console.log('Seeding modules...');
+  
+  for (const module of defaultModules) {
+    const existingModule = await prisma.module.findFirst({
+      where: { name: module.name }
+    });
+    
+    if (!existingModule) {
+      await prisma.module.create({
+        data: module
+      });
+      console.log(`Created module: ${module.name}`);
+    } else {
+      console.log(`Module already exists: ${module.name}`);
+    }
+  }
+}
+
+async function seedProjectsForPortfolio() {
+  console.log('Seeding project manager portfolio data...');
+  
+  // 1. Create a project manager user if it doesn't exist
+  let projectManager = await prisma.user.findFirst({
+    where: { 
+      role: 'PROJECT_MANAGER',
+      email: 'pm@example.com'
+    }
+  });
+  
+  if (!projectManager) {
+    projectManager = await prisma.user.create({
+      data: {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'pm@example.com',
+        password: '$2a$10$fYyKxIwDfnvXkDbI8/yvouQdQ.KbvLUUPVJWrTbzj3jp1QO8WtAzK', // 'password123'
+        employeeId: 'EMP1001',
+        role: 'PROJECT_MANAGER',
+      }
+    });
+    console.log('Created project manager user:', projectManager.email);
+  } else {
+    console.log('Using existing project manager:', projectManager.email);
+  }
+  
+  // 2. Create customers
+  const customers = [
+    { name: 'TATA Chemicals', vertical: 'chemical' },
+    { name: 'UltraTech Cement', vertical: 'cement' },
+    { name: 'JSW Steel', vertical: 'metals' }
+  ];
+  
+  const createdCustomers = [];
+  
+  for (const customerData of customers) {
+    const existingCustomer = await prisma.customer.findFirst({
+      where: { name: customerData.name }
+    });
+    
+    if (!existingCustomer) {
+      const customer = await prisma.customer.create({
+        data: customerData
+      });
+      createdCustomers.push(customer);
+      console.log(`Created customer: ${customer.name}`);
+    } else {
+      createdCustomers.push(existingCustomer);
+      console.log(`Using existing customer: ${existingCustomer.name}`);
+    }
+  }
+  
+  // 3. Create sites for each customer
+  const sites = [
+    { customerId: createdCustomers[0].id, name: 'Babrala Plant', code: 'BAB' },
+    { customerId: createdCustomers[0].id, name: 'Mithapur Plant', code: 'MIT' },
+    { customerId: createdCustomers[1].id, name: 'Kotputli Plant', code: 'KOT' },
+    { customerId: createdCustomers[1].id, name: 'Gujarat Plant', code: 'GUJ' },
+    { customerId: createdCustomers[2].id, name: 'Vijayanagar Plant', code: 'VIJ' }
+  ];
+  
+  const createdSites = [];
+  
+  for (const siteData of sites) {
+    const existingSite = await prisma.site.findFirst({
+      where: { 
+        customerId: siteData.customerId,
+        code: siteData.code
+      }
+    });
+    
+    if (!existingSite) {
+      const site = await prisma.site.create({
+        data: siteData
+      });
+      createdSites.push(site);
+      console.log(`Created site: ${site.name} (${site.code})`);
+    } else {
+      createdSites.push(existingSite);
+      console.log(`Using existing site: ${existingSite.name} (${existingSite.code})`);
+    }
+  }
+  
+  // 4. Create modules if they don't exist
+  const moduleNames = ['Enroute', 'VC', 'Inplant-IB', 'Inplant-OB', 'EpoD'];
+  const createdModules = [];
+  
+  for (const moduleName of moduleNames) {
+    let module = await prisma.module.findUnique({
+      where: { name: moduleName }
+    });
+    
+    if (!module) {
+      module = await prisma.module.create({
+        data: { name: moduleName }
+      });
+      console.log(`Created module: ${module.name}`);
+    } else {
+      console.log(`Using existing module: ${module.name}`);
+    }
+    
+    createdModules.push(module);
+  }
+  
+  // 5. Create purchase orders
+  const purchaseOrders = [
+    { 
+      customerId: createdCustomers[0].id, 
+      orderType: 'External', 
+      poNumber: 'TC-2023-001', 
+      issueDate: new Date('2023-05-01'), 
+      expiryDate: new Date('2024-05-01'), 
+      amount: 500000, 
+      description: 'Supply chain visibility implementation' 
+    },
+    { 
+      customerId: createdCustomers[1].id, 
+      orderType: 'External', 
+      poNumber: 'ULT-2023-015', 
+      issueDate: new Date('2023-06-15'), 
+      expiryDate: new Date('2024-06-15'), 
+      amount: 750000, 
+      description: 'End-to-end logistics management system' 
+    },
+    { 
+      customerId: createdCustomers[2].id, 
+      orderType: 'Internal', 
+      poNumber: 'JSW-2023-INT-008', 
+      issueDate: new Date('2023-07-10'), 
+      expiryDate: new Date('2024-12-31'), 
+      amount: 650000, 
+      description: 'Logistics operations optimization' 
+    }
+  ];
+  
+  const createdPOs = [];
+  
+  for (const poData of purchaseOrders) {
+    const existingPO = await prisma.purchaseOrder.findFirst({
+      where: { 
+        customerId: poData.customerId,
+        poNumber: poData.poNumber
+      }
+    });
+    
+    if (!existingPO) {
+      const po = await prisma.purchaseOrder.create({
+        data: poData
+      });
+      createdPOs.push(po);
+      console.log(`Created purchase order: ${po.poNumber}`);
+    } else {
+      createdPOs.push(existingPO);
+      console.log(`Using existing purchase order: ${existingPO.poNumber}`);
+    }
+  }
+  
+  // 6. Create PO_Site links
+  const poSiteLinks = [
+    { poId: createdPOs[0].id, siteId: createdSites[0].id },
+    { poId: createdPOs[0].id, siteId: createdSites[1].id },
+    { poId: createdPOs[1].id, siteId: createdSites[2].id },
+    { poId: createdPOs[1].id, siteId: createdSites[3].id },
+    { poId: createdPOs[2].id, siteId: createdSites[4].id }
+  ];
+  
+  const createdPOSites = [];
+  
+  for (const poSiteData of poSiteLinks) {
+    const existingPOSite = await prisma.pO_Site.findFirst({
+      where: { 
+        poId: poSiteData.poId,
+        siteId: poSiteData.siteId
+      }
+    });
+    
+    if (!existingPOSite) {
+      const poSite = await prisma.pO_Site.create({
+        data: poSiteData
+      });
+      createdPOSites.push(poSite);
+      console.log(`Created PO-Site link`);
+    } else {
+      createdPOSites.push(existingPOSite);
+      console.log(`Using existing PO-Site link`);
+    }
+  }
+  
+  // 7. Create PO_Site_Module links
+  const moduleAssignments = [
+    // TATA Chemicals Babrala - Enroute
+    { poSiteId: createdPOSites[0].id, moduleId: createdModules[0].id },
+    // TATA Chemicals Babrala - VC
+    { poSiteId: createdPOSites[0].id, moduleId: createdModules[1].id },
+    // TATA Chemicals Mithapur - Inplant-IB
+    { poSiteId: createdPOSites[1].id, moduleId: createdModules[2].id },
+    // UltraTech Kotputli - EpoD
+    { poSiteId: createdPOSites[2].id, moduleId: createdModules[4].id },
+    // UltraTech Gujarat - Enroute
+    { poSiteId: createdPOSites[3].id, moduleId: createdModules[0].id },
+    // JSW Vijayanagar - Inplant-OB
+    { poSiteId: createdPOSites[4].id, moduleId: createdModules[3].id }
+  ];
+  
+  const createdPOSiteModules = [];
+  
+  for (const moduleData of moduleAssignments) {
+    const existingPOSiteModule = await prisma.pO_Site_Module.findFirst({
+      where: { 
+        poSiteId: moduleData.poSiteId,
+        moduleId: moduleData.moduleId
+      }
+    });
+    
+    if (!existingPOSiteModule) {
+      const poSiteModule = await prisma.pO_Site_Module.create({
+        data: moduleData
+      });
+      createdPOSiteModules.push(poSiteModule);
+      console.log(`Created PO-Site-Module link`);
+    } else {
+      createdPOSiteModules.push(existingPOSiteModule);
+      console.log(`Using existing PO-Site-Module link`);
+    }
+  }
+  
+  // 8. Assign modules to project manager
+  for (const poSiteModule of createdPOSiteModules) {
+    const existingAssignment = await prisma.assignment.findFirst({
+      where: {
+        poSiteModuleId: poSiteModule.id,
+        projectManagerId: projectManager.id
+      }
+    });
+    
+    if (!existingAssignment) {
+      await prisma.assignment.create({
+        data: {
+          poSiteModuleId: poSiteModule.id,
+          projectManagerId: projectManager.id
+        }
+      });
+      console.log(`Assigned module to project manager`);
+    } else {
+      console.log(`Module already assigned to project manager`);
+    }
+  }
+  
+  // 9. Create projects with different states (some with plans, some without)
+  const projectData = [
+    {
+      name: 'TATA Chemicals Logistics Optimization',
+      code: 'TCL-2023-001',
+      modules: [createdPOSiteModules[0].id, createdPOSiteModules[1].id],
+      hasPlan: true
+    },
+    {
+      name: 'UltraTech Digital Transformation',
+      code: 'ULT-2023-015',
+      modules: [createdPOSiteModules[3].id],
+      hasPlan: false
+    },
+    {
+      name: 'JSW Steel Supply Chain Visibility',
+      code: 'JSW-2023-008',
+      modules: [createdPOSiteModules[5].id],
+      hasPlan: true
+    }
+  ];
+  
+  for (const project of projectData) {
+    // Check if project exists
+    const existingProject = await prisma.pMProject.findUnique({
+      where: { code: project.code }
+    });
+    
+    if (!existingProject) {
+      // Create site structure for metadata
+      type SiteModule = {
+        id: string;
+        name: string;
+      };
+      
+      type SiteInfo = {
+        id: string;
+        name: string;
+        code: string;
+        modules: SiteModule[];
+      };
+      
+      type MetadataStructure = {
+        sites: SiteInfo[];
+      };
+      
+      const metadataStructure: MetadataStructure = { sites: [] };
+      const sitesMap = new Map<string, SiteInfo>();
+      
+      for (const moduleId of project.modules) {
+        const poSiteModule = await prisma.pO_Site_Module.findUnique({
+          where: { id: moduleId },
+          include: {
+            module: true,
+            poSite: {
+              include: {
+                site: true
+              }
+            }
+          }
+        });
+        
+        if (poSiteModule) {
+          const site = poSiteModule.poSite.site;
+          const module = poSiteModule.module;
+          
+          if (!sitesMap.has(site.id)) {
+            sitesMap.set(site.id, {
+              id: site.id,
+              name: site.name,
+              code: site.code,
+              modules: []
+            });
+          }
+          
+          sitesMap.get(site.id)?.modules.push({
+            id: module.id,
+            name: module.name
+          });
+        }
+      }
+      
+      metadataStructure.sites = Array.from(sitesMap.values());
+      
+      // Create project
+      const newProject = await prisma.pMProject.create({
+        data: {
+          name: project.name,
+          code: project.code,
+          projectManagerId: projectManager.id,
+          metadata: metadataStructure
+        }
+      });
+      
+      console.log(`Created project: ${newProject.name} (${newProject.code})`);
+      
+      // Create project modules
+      for (const moduleId of project.modules) {
+        await prisma.projectModule.create({
+          data: {
+            projectId: newProject.id,
+            poSiteModuleId: moduleId
+          }
+        });
+      }
+      
+      // Create project plan if needed
+      if (project.hasPlan) {
+        const projectPlan = await prisma.projectPlan.create({
+          data: {
+            projectId: newProject.id,
+            tasks: {
+              create: [
+                {
+                  siNo: Math.floor(Math.random() * 10000), // Random siNo to avoid conflicts
+                  wbsNo: "1",
+                  taskName: "Project Kickoff",
+                  level: 0,
+                  isParent: true,
+                  startDate: new Date(),
+                  endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days later
+                  duration: 30
+                },
+                {
+                  siNo: Math.floor(Math.random() * 10000), // Random siNo to avoid conflicts
+                  wbsNo: "2",
+                  taskName: "Implementation",
+                  level: 0,
+                  isParent: true,
+                  startDate: new Date(Date.now() + 31 * 24 * 60 * 60 * 1000), // 31 days later
+                  endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days later
+                  duration: 60
+                }
+              ]
+            }
+          }
+        });
+        
+        console.log(`Created project plan for: ${newProject.code}`);
+      }
+    } else {
+      console.log(`Project already exists: ${existingProject.name} (${existingProject.code})`);
+    }
+  }
+  
+  console.log('Portfolio seeding completed!');
+}
+
 async function main() {
   const project = await prisma.project.create({
     data: {
@@ -335,6 +759,14 @@ async function main() {
   });
 
   console.log(`Created project with id: ${project.id}`);
+
+  // Add module seeding
+  await seedModules();
+  
+  // New seeding function for project manager portfolio
+  await seedProjectsForPortfolio();
+  
+  console.log('Seeding complete!');
 }
 
 main()

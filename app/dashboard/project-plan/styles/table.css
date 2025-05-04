@@ -1,0 +1,135 @@
+/* Task table styles */
+.task-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.task-table th {
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid hsl(var(--border));
+  background-color: hsl(var(--muted));
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.task-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid hsl(var(--border));
+  vertical-align: middle;
+}
+
+.task-table tr:hover td {
+  background-color: hsl(var(--muted) / 50%);
+}
+
+.task-table tr.selected td {
+  background-color: hsl(var(--primary) / 10%);
+}
+
+.task-table tr.active td {
+  background-color: hsl(var(--muted) / 70%);
+}
+
+/* Task indentation */
+.task-level-0 .task-name {
+  font-weight: 600;
+}
+
+.task-level-1 .task-name {
+  padding-left: 1rem;
+}
+
+.task-level-2 .task-name {
+  padding-left: 2rem;
+}
+
+.task-level-3 .task-name {
+  padding-left: 3rem;
+}
+
+.task-level-4 .task-name {
+  padding-left: 4rem;
+}
+
+/* Milestone styling */
+.task-milestone .task-name::before {
+  content: "◆";
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: hsl(var(--primary));
+}
+
+/* Progress bar */
+.progress-bar-container {
+  width: 100%;
+  height: 0.5rem;
+  background-color: hsl(var(--muted));
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: hsl(var(--primary));
+  border-radius: 999px;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-badge.not-started {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
+.status-badge.in-progress {
+  background-color: hsl(var(--primary) / 20%);
+  color: hsl(var(--primary));
+}
+
+.status-badge.completed {
+  background-color: hsl(var(--success) / 20%);
+  color: hsl(var(--success));
+}
+
+.status-badge.delayed {
+  background-color: hsl(var(--destructive) / 20%);
+  color: hsl(var(--destructive));
+}
+
+/* Date picker styling */
+.date-picker-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid hsl(var(--border));
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.date-picker-button:hover {
+  background-color: hsl(var(--muted) / 50%);
+}
+
+.date-picker-button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+} 

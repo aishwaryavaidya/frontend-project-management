@@ -132,7 +132,7 @@ const SummaryTable = () => {
   </div>
 
   {/* Table */}
-  <div className="overflow-x-auto overflow-y-auto h-[300px] w-[95vw]">
+  <div className="overflow-x-auto overflow-y-auto h-[300px] w-full max-w-full" style={{ maxWidth: "calc(100vw - 100px)" }}>
   <table className="min-w-full border-collapse text-xs">
     {/* Sticky header */}
     <thead className="bg-gray-200 dark:bg-gray-950 sticky top-0 z-10 shadow">
