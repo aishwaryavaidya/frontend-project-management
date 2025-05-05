@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Task } from '@/types/task';
-import { useTaskStore } from '@/store/taskStore';
+import { Task } from '../../types/task';
+import { useTaskStore } from '../../store/taskStore';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { validatePredecessors } from '@/lib/taskUtils';
+import { validatePredecessors } from '../../lib/taskUtils';
 import { useToast } from '@/hooks/use-toast';
 import { AlertCircle, Info } from 'lucide-react';
 

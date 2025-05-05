@@ -1,4 +1,4 @@
-import { Task } from '@/types/task';
+import { Task } from '@/app/dashboard/project-plan/types/task';
 
 // Type definitions for templates
 export interface Template {

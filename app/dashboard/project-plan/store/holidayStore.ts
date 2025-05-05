@@ -1,23 +1,20 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export interface AutoplantHoliday {
-  id: string;
-  date: string; // ISO date string YYYY-MM-DD
-  day: string; // Day of week (3-letter abbreviation)
+export type AutoplantHoliday = {
+  id: number;
+  date: string; // ISO date string
+  day: string;
   name: string;
-  optional: boolean;
-}
+  optional?: boolean;
+};
 
-interface HolidayState {
-  // Default exclusions
+export interface HolidayState {
   excludeSundays: boolean;
   excludeAllSaturdays: boolean;
   excludeEvenSaturdays: boolean;
   excludeAutoplantHolidays: boolean;
   excludeOptionalHolidays: boolean;
-  
-  // Holiday list
   autoplantHolidays: AutoplantHoliday[];
   
   // Actions
@@ -27,87 +24,63 @@ interface HolidayState {
   toggleAutoplantHolidays: () => void;
   toggleOptionalHolidays: () => void;
   addHoliday: (holiday: AutoplantHoliday) => void;
-  updateHoliday: (id: string, updates: Partial<AutoplantHoliday>) => void;
-  deleteHoliday: (id: string) => void;
-  
-  // Helper functions
-  isExcludedDate: (date: Date) => boolean;
-  getBusinessDays: (startDate: Date, endDate: Date) => number;
+  updateHoliday: (holiday: AutoplantHoliday) => void;
+  deleteHoliday: (id: number) => void;
+  setHolidays: (holidays: AutoplantHoliday[]) => void;
 }
 
 export const useHolidayStore = create<HolidayState>()(
   persist(
-    (set, get) => ({
-      // Default settings
+    (set) => ({
       excludeSundays: true,
       excludeAllSaturdays: false,
       excludeEvenSaturdays: false,
       excludeAutoplantHolidays: true,
-      excludeOptionalHolidays: false,
+      excludeOptionalHolidays: true,
       autoplantHolidays: [
-        {
-          id: '1',
-          date: '2024-01-01',
-          day: 'Mon',
-          name: 'New Year\'s Day',
-          optional: false,
-        },
-        {
-          id: '2',
-          date: '2024-01-26',
-          day: 'Fri',
-          name: 'Republic Day',
-          optional: false,
-        },
-        {
-          id: '3',
-          date: '2024-08-15',
-          day: 'Thu',
-          name: 'Independence Day',
-          optional: false,
-        },
-        {
-          id: '4',
-          date: '2024-10-02',
-          day: 'Wed',
-          name: 'Gandhi Jayanti',
-          optional: false,
-        },
-        {
-          id: '5',
-          date: '2024-12-25',
-          day: 'Wed',
-          name: 'Christmas Day',
-          optional: false,
-        },
+        { id: 1, date: '2025-01-01', day: 'Wed', name: 'New Year' },
+        { id: 2, date: '2025-02-26', day: 'Wed', name: 'Maha Shivaratri' },
+        { id: 3, date: '2025-03-14', day: 'Fri', name: 'Holi' },
+        { id: 4, date: '2025-04-18', day: 'Fri', name: 'Good Friday' },
+        { id: 5, date: '2025-05-01', day: 'Thu', name: 'Maharashtra Day' },
+        { id: 6, date: '2025-08-15', day: 'Fri', name: 'Independence Day' },
+        { id: 7, date: '2025-08-27', day: 'Wed', name: 'Ganesh Chaturthi' },
+        { id: 8, date: '2025-10-02', day: 'Thu', name: 'Vijaya Dashami/Gandhi Jayanti' },
+        { id: 9, date: '2025-10-21', day: 'Tue', name: 'Diwali' },
+        { id: 10, date: '2025-10-22', day: 'Wed', name: 'Deepavali Holiday' },
+        { id: 11, date: '2025-12-25', day: 'Thu', name: 'Christmas Day' },
+        { id: 12, date: '2025-03-31', day: 'Mon', name: 'Idul Fitr', optional: true },
+        { id: 13, date: '2025-11-05', day: 'Wed', name: 'Guru Nank Jayanti' },
       ],
       
-      // Actions for toggles
       toggleSundays: () => set(state => ({ excludeSundays: !state.excludeSundays })),
       toggleAllSaturdays: () => set(state => ({ 
         excludeAllSaturdays: !state.excludeAllSaturdays,
-        // If we're enabling all Saturdays, disable even Saturdays
-        excludeEvenSaturdays: !state.excludeAllSaturdays ? false : state.excludeEvenSaturdays
+        // Disable even saturdays if all saturdays is enabled
+        excludeEvenSaturdays: !state.excludeAllSaturdays ? false : state.excludeEvenSaturdays 
       })),
-      toggleEvenSaturdays: () => set(state => ({ excludeEvenSaturdays: !state.excludeEvenSaturdays })),
+      toggleEvenSaturdays: () => set(state => ({ 
+        excludeEvenSaturdays: !state.excludeEvenSaturdays,
+        // Disable all saturdays if even saturdays is enabled
+        excludeAllSaturdays: !state.excludeEvenSaturdays ? false : state.excludeAllSaturdays
+      })),
       toggleAutoplantHolidays: () => set(state => ({ 
         excludeAutoplantHolidays: !state.excludeAutoplantHolidays,
-        // If we're disabling holidays, also disable optional ones
+        // Disable optional holidays toggle if autoplant holidays are not excluded
         excludeOptionalHolidays: !state.excludeAutoplantHolidays ? false : state.excludeOptionalHolidays
       })),
       toggleOptionalHolidays: () => set(state => ({ excludeOptionalHolidays: !state.excludeOptionalHolidays })),
       
-      // CRUD operations for holidays
-      addHoliday: (holiday) => set(state => ({
-        autoplantHolidays: [
-          ...state.autoplantHolidays,
-          { ...holiday, id: String(crypto.randomUUID()) }
-        ]
-      })),
+      addHoliday: (holiday) => set(state => {
+        const maxId = Math.max(0, ...state.autoplantHolidays.map(h => h.id));
+        return { 
+          autoplantHolidays: [...state.autoplantHolidays, { ...holiday, id: maxId + 1 }]
+        };
+      }),
       
-      updateHoliday: (id, updates) => set(state => ({
+      updateHoliday: (holiday) => set(state => ({
         autoplantHolidays: state.autoplantHolidays.map(h => 
-          h.id === id ? { ...h, ...updates } : h
+          h.id === holiday.id ? holiday : h
         )
       })),
       
@@ -115,74 +88,54 @@ export const useHolidayStore = create<HolidayState>()(
         autoplantHolidays: state.autoplantHolidays.filter(h => h.id !== id)
       })),
       
-      // Helper function to check if a date is excluded
-      isExcludedDate: (date: Date) => {
-        const state = get();
-        const day = date.getDay();
-        const dateStr = date.toISOString().split('T')[0];
-        
-        // Check for Sunday
-        if (state.excludeSundays && day === 0) {
-          return true;
-        }
-        
-        // Check for Saturday
-        if (state.excludeAllSaturdays && day === 6) {
-          return true;
-        }
-        
-        // Check for even Saturday
-        if (state.excludeEvenSaturdays && day === 6) {
-          // Get the Saturday number in the month (1st, 2nd, 3rd, 4th, 5th)
-          const weekNumber = Math.ceil(date.getDate() / 7);
-          if (weekNumber % 2 === 0) {
-            return true;
-          }
-        }
-        
-        // Check for company holidays
-        if (state.excludeAutoplantHolidays) {
-          const holiday = state.autoplantHolidays.find(h => h.date === dateStr);
-          if (holiday) {
-            // If it's optional, only exclude if we're excluding optional holidays
-            if (holiday.optional) {
-              return state.excludeOptionalHolidays;
-            }
-            // Otherwise exclude it
-            return true;
-          }
-        }
-        
-        return false;
-      },
-      
-      // Helper to calculate business days between two dates
-      getBusinessDays: (startDate: Date, endDate: Date) => {
-        const state = get();
-        let count = 0;
-        const curDate = new Date(startDate.getTime());
-        
-        while (curDate <= endDate) {
-          if (!state.isExcludedDate(curDate)) {
-            count++;
-          }
-          curDate.setDate(curDate.getDate() + 1);
-        }
-        
-        return count;
-      }
+      setHolidays: (holidays) => set({ autoplantHolidays: holidays }),
     }),
     {
-      name: 'holiday-settings',
-      // Only store these properties in localStorage
-      partialize: (state) => ({
-        excludeSundays: state.excludeSundays,
-        excludeAllSaturdays: state.excludeAllSaturdays,
-        excludeEvenSaturdays: state.excludeEvenSaturdays,
-        excludeAutoplantHolidays: state.excludeAutoplantHolidays,
-        excludeOptionalHolidays: state.excludeOptionalHolidays,
-        autoplantHolidays: state.autoplantHolidays,
-      }),
+      name: 'holiday-storage',
     }
   )
-); 
+);
+
+// Helper function to check if a date is a holiday
+export function isHoliday(date: Date): boolean {
+  const { 
+    excludeSundays, 
+    excludeAllSaturdays, 
+    excludeEvenSaturdays, 
+    excludeAutoplantHolidays,
+    excludeOptionalHolidays,
+    autoplantHolidays 
+  } = useHolidayStore.getState();
+  
+  // Format the date as ISO string (YYYY-MM-DD) for comparison
+  const dateStr = date.toISOString().split('T')[0];
+  
+  // Check if it's Sunday (day 0)
+  if (excludeSundays && date.getDay() === 0) {
+    return true;
+  }
+  
+  // Check if it's Saturday (day 6)
+  if (excludeAllSaturdays && date.getDay() === 6) {
+    return true;
+  }
+  
+  // Check if it's Even Saturday - get the date (1-31) and check if it's even
+  if (excludeEvenSaturdays && date.getDay() === 6 && date.getDate() % 2 === 0) {
+    return true;
+  }
+  
+  // Check if it's an Autoplant holiday
+  if (excludeAutoplantHolidays) {
+    const holiday = autoplantHolidays.find(h => h.date === dateStr);
+    if (holiday) {
+      // If it's an optional holiday, only exclude if optionals are included in exclusion
+      if (holiday.optional) {
+        return excludeOptionalHolidays;
+      }
+      return true; // Mandatory holiday
+    }
+  }
+  
+  return false;
+} 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { Task, Remark, STAGES, PRODUCTS } from '@/app/dashboard/project-plan/types/task';
-import { useTaskStore } from '@/store/taskStore';
+import { useTaskStore } from '@/app/dashboard/project-plan/store/taskStore';
 import { List, AutoSizer } from 'react-virtualized';
 import { Plus, CheckSquare, Trash2, Undo, Redo, ChevronRight, ChevronLeft, Eye, MessageSquarePlus, Download, FileSpreadsheet, View, Star, CircleArrowUp, CircleArrowDown, Layers, Save, FileCheck, ArrowDownToLine, FlagTriangleRight, Import, Snowflake, ChevronDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';

@@ -1,4 +1,4 @@
-import { Task, TaskUpdate } from '@/types/task';
+import { Task, TaskUpdate } from '@/app/dashboard/project-plan/types/task';
 import { addDays } from 'date-fns';
 import { adjustDates, calculateEndDate, calculateDuration } from './dateUtils';
 

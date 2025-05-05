@@ -1,6 +1,6 @@
 import { addDays, differenceInDays, isFuture } from 'date-fns';
-import { Task } from '@/types/task';
-import { isHoliday } from '@/store/holidayStore';
+import { Task } from '@/app/dashboard/project-plan/types/task';
+import { isHoliday } from '@/app/dashboard/project-plan/store/holidayStore';
 
 /**
  * Calculate end date based on start date and duration
