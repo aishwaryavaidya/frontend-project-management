@@ -1,4 +1,6 @@
 import React from 'react'
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/config/auth";
 import { AppSidebar } from "@/components/app-sidebar"
 import AuthenticatedAvatar from '@/components/global/AuthenticatedAvatar'
 import { Session } from 'next-auth'
@@ -23,7 +25,8 @@ import { ModeToggle } from '@/components/mode-toggle'
 import { ChatBox } from './chat/ChatBox'
 
 
-export default function Layout({ children, session }: { children: React.ReactNode;   session: Session | null;}) {
+export default async function Layout({ children }: { children: React.ReactNode}) {
+  const session = await getServerSession(authOptions);
   return (
     <SidebarProvider >
     <AppSidebar/>

@@ -13,8 +13,7 @@ import { Session } from "next-auth";
 import Link from "next/link";
 import LogoutBtn from "@/components/global/LogoutBtn";
 
-export default function AuthenticatedAvatar({session,}: {session: Session | null}) //typescript check that session can either be an instance of Session object or null
-{
+export default function AuthenticatedAvatar({ session }: { session: Session | null }) {
   const userInitials = getInitials(session?.user?.name || "");
   return (
     <DropdownMenu>
@@ -30,8 +29,11 @@ export default function AuthenticatedAvatar({session,}: {session: Session | null
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>
           <p>{session?.user?.name}</p>
-          <p className=" text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             {session?.user?.email}
+          </p>
+<p className="text-xs text-muted-foreground">
+            {session?.user?.code}
           </p>
         </DropdownMenuLabel>
 
@@ -41,7 +43,8 @@ export default function AuthenticatedAvatar({session,}: {session: Session | null
         </DropdownMenuItem>
         <DropdownMenuItem>Services</DropdownMenuItem>
         {/* <DropdownMenuItem>Team</DropdownMenuItem> */}
-        <DropdownMenuItem>
+
+      <DropdownMenuItem>
           <LogoutBtn />
         </DropdownMenuItem>
       </DropdownMenuContent>

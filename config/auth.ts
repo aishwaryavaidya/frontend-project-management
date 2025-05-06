@@ -1,12 +1,8 @@
 import { NextAuthOptions, User } from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import type { Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { prisma } from "@/prisma/db";
-import bcrypt from "bcrypt";
+
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as Adapter,
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
@@ -15,62 +11,39 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
+    signOut: "/login",
+    error: "/login", // Add error page
   },
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        employee_code: { label: "Employee Code", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req): Promise<User | null> {
         try {
-          console.log("Authorize function called with credentials:", credentials);
-          // Check if user credentials are correct
-          if (!credentials?.email || !credentials?.password) {
-            throw { error: "No Inputs Found", status: 401 };
-          }
-          console.log("Pass 1 checked");
+          console.log("Attempting login with:", credentials);
 
-          // Check if user exists
-          const user = await prisma.user.findUnique({
-            where: { email: credentials.email },
+          const response = await fetch(`http://127.0.0.1:8000/login/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              employee_code: credentials?.employee_code,
+              password: credentials?.password,
+            }),
           });
 
-          if (!user) {
-            console.log("No user found");
-            throw { error: "No user found", status: 401 };
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || "Invalid credentials");
           }
 
-          console.log("Pass 2 Checked");
-          console.log(user);
-
-          // Check if password is correct
-          let passwordMatch: boolean = false;
-          if (user && user.password) {
-            passwordMatch = await bcrypt.compare(credentials.password, user.password);
-          }
-
-          if (!passwordMatch) {
-            console.log("Password incorrect");
-            throw { error: "Password Incorrect", status: 401 };
-          }
-
-          console.log("Pass 3 Checked");
-          console.log("User Compiled");
-          console.log(user);
-
-          // Return a User object that matches the expected type
-          return {
-            id: user.id,
-            email: user.email,
-            role: user.role,
-            name: `${user.firstName} ${user.lastName}`,
-          } as User; // Cast to User type
+          return data;  // Should return { access, refresh, name, code }
         } catch (error) {
-          console.log("All Failed");
-          console.log(error);
-          throw { error: "Something went wrong", status: 401 };
+          console.error("Login failed:", error);
+          throw new Error(error instanceof Error ? error.message : "Invalid credentials");
         }
       },
     }),
@@ -79,21 +52,41 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       console.log("JWT callback", { token, user });
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
-        token.exp = Math.floor(Date.now() / 1000) + 60 * 60 * 2; // Expiry timestamp 2 hours
+        token.accessToken = user.access;
+        token.refreshToken = user.refresh;
+        token.name = user.name;
+        token.code = user.code;
       }
       return token;
     },
-    session({ session, token }) {
+    async session({ session, token }) {
       console.log("Session callback", { session, token });
       if (session.user && token) {
-        session.user.id = token.id;
-        session.user.role = token.role;
-        // Convert expiration timestamp to milliseconds
-        session.expires = new Date((token.exp as number) * 1000).toISOString();
+        session.accessToken = token.accessToken;
+        session.refreshToken = token.refreshToken;
+        session.user.name = token.name as string;
+        session.user.code = token.code as string;
       }
       return session;
     },
   },
+  events: {
+    async signOut({ token }) {
+      if (token.refreshToken) {
+        try {
+          // Call Django logout endpoint to blacklist the token
+          await fetch('http://127.0.0.1:8000/logout/', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token.accessToken}`
+            },
+            body: JSON.stringify({ refresh: token.refreshToken }),
+          });
+        } catch (error) {
+          console.error('Error during sign out:', error);
+        }
+      }
+    }
+  }
 };
