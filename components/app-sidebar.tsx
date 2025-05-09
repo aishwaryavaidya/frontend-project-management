@@ -13,7 +13,10 @@ import {
   MessageCircle,
   Settings2,
   HomeIcon,
-  LockKeyhole
+  LockKeyhole,
+  ClipboardList,
+  Users,
+  FolderKanban
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -57,11 +60,60 @@ const data = {
       items: [
         {
           title: "Summary Overview",
-          url: "dashboard/summary",
+          url: "/dashboard/summary",
         },
         {
           title: "Project Overview",
           url: "/dashboard/project/plan",
+        },
+      ],
+    },
+    {
+      title: "Order Entry",
+      url: "/dashboard/order-entry",
+      icon: ClipboardList,
+      items: [
+        {
+          title: "New Order",
+          url: "/dashboard/order-entry",
+        },
+        {
+          title: "Order History",
+          url: "/dashboard/order-entry/history",
+        },
+      ],
+    },
+    {
+      title: "Resource Allocation",
+      url: "/dashboard/resource-allocation",
+      icon: Users,
+      items: [
+        {
+          title: "Assign Resources",
+          url: "/dashboard/resource-allocation",
+        },
+        {
+          title: "Assignment History",
+          url: "/dashboard/resource-allocation/history",
+        },
+      ],
+    },
+    {
+      title: "Project Manager",
+      url: "/dashboard/project-manager",
+      icon: FolderKanban,
+      items: [
+        {
+          title: "Create Project",
+          url: "/dashboard/project-manager",
+        },
+        {
+          title: "Project Portfolio",
+          url: "/dashboard/project-manager/portfolio",
+        },
+        {
+          title: "Project Plans",
+          url: "/dashboard/project-plan",
         },
       ],
     },
@@ -72,10 +124,6 @@ const data = {
       icon: HomeIcon,
       isActive: true,
       items: [
-        // {
-        //   title: "Summary",
-        //   url: "/dashboard/home/summary",
-        // },
         {
           title: "Task Kanban",
           url: "/dashboard/home/my-task",
@@ -190,11 +238,6 @@ const data = {
       url: "/admin/users",
       icon: LockKeyhole,
     },
-    // {
-    //   name: "Travel",
-    //   url: "#",
-    //   icon: Map,
-    // },
   ],
 }
 

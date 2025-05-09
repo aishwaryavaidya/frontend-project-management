@@ -80,19 +80,21 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String       @id @default(uuid())
   firstName     String
   lastName      String
-  email         String    @unique
+  email         String       @unique
   password      String
   phone         String?
-  employeeId    String    @unique
-  role          Role      @default(USER)
+  employeeId    String       @unique
+  role          Role         @default(USER)
   emailVerified DateTime?
   accounts      Account[]
   sessions      Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  projects      PMProject[]
+  Assignment    Assignment[]
 }
 
 model Account {
@@ -130,52 +132,52 @@ model VerificationToken {
 }
 
 //supersonic
-model Phase {
-  id         Int         @id @default(autoincrement())
-  name       String
-  milestones Milestone[]
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-}
+// model Phase {
+//   id         Int         @id @default(autoincrement())
+//   name       String
+//   // milestones Milestone[]
+//   createdAt  DateTime    @default(now())
+//   updatedAt  DateTime    @updatedAt
+// }
 
-model Milestone {
-  id          Int       @id @default(autoincrement())
-  index       Int
-  name        String
-  startDate   DateTime
-  endDate     DateTime
-  actualStart DateTime?
-  actualEnd   DateTime?
-  progress    Float     @default(0)
-  clientSpoc  String
-  apSpoc      String
-  raidNotes   String?
-  phaseId     Int
-  phase       Phase     @relation(fields: [phaseId], references: [id])
-  tasks       Task[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  isExpanded  Boolean?
-}
+// model Milestone {
+//   id          Int       @id @default(autoincrement())
+//   index       Int
+//   name        String
+//   startDate   DateTime
+//   endDate     DateTime
+//   actualStart DateTime?
+//   actualEnd   DateTime?
+//   progress    Float     @default(0)
+//   clientSpoc  String
+//   apSpoc      String
+//   raidNotes   String?
+//   phaseId     Int
+//   phase       Phase     @relation(fields: [phaseId], references: [id])
+//   tasks       Task[]
+//   createdAt   DateTime  @default(now())
+//   updatedAt   DateTime  @updatedAt
+//   isExpanded  Boolean?
+// }
 
-model Task {
-  id             Int          @id @default(autoincrement())
-  index          String // Format: "1.1", "1.2", etc.
-  name           String
-  startDate      DateTime
-  endDate        DateTime
-  actualStart    DateTime?
-  actualEnd      DateTime?
-  progress       Float        @default(0)
-  clientSpoc     String
-  apSpoc         String
-  milestoneId    Int
-  milestone      Milestone    @relation(fields: [milestoneId], references: [id])
-  assignments    Assignment[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  projectManager String
-}
+// model Task {
+//   id             Int          @id @default(autoincrement())
+//   index          String // Format: "1.1", "1.2", etc.
+//   name           String
+//   startDate      DateTime
+//   endDate        DateTime
+//   actualStart    DateTime?
+//   actualEnd      DateTime?
+//   progress       Float        @default(0)
+//   clientSpoc     String
+//   apSpoc         String
+//   milestoneId    Int
+//   milestone      Milestone    @relation(fields: [milestoneId], references: [id])
+//   assignments    Assignment[]
+//   createdAt      DateTime     @default(now())
+//   updatedAt      DateTime     @updatedAt
+//   projectManager String
+// }
 
 model Employee {
   id          Int          @id @default(autoincrement())
@@ -188,16 +190,15 @@ model Employee {
 }
 
 model Assignment {
-  id           Int      @id @default(autoincrement())
-  taskId       Int
-  employeeId   Int
-  role         String
-  duration     Int // Duration in days
-  employee     Employee @relation(fields: [employeeId], references: [id])
-  task         Task     @relation(fields: [taskId], references: [id])
-  employeeName String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id               String         @id @default(uuid())
+  poSiteModuleId   String
+  poSiteModule     PO_Site_Module @relation(fields: [poSiteModuleId], references: [id])
+  projectManagerId String
+  projectManager   User           @relation(fields: [projectManagerId], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  Employee         Employee?      @relation(fields: [employeeId], references: [id])
+  employeeId       Int?
 }
 
 //RAID
@@ -239,4 +240,210 @@ model RAIDItem {
   updatedAt        DateTime  @updatedAt
 
   @@index([projectId])
+}
+
+// new addition
+model Task {
+  id              String    @id @default(uuid())
+  siNo            Int       @unique
+  wbsNo           String
+  taskName        String
+  predecessorIds  String? // Comma-separated SI numbers
+  duration        Int?
+  startDate       DateTime?
+  endDate         DateTime?
+  actualStartDate DateTime?
+  actualEndDate   DateTime?
+  actualDuration  Int?
+  level           Int       @default(0)
+  isMilestone     Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([siNo])
+  @@index([level])
+  @@index([predecessorIds])
+}
+
+// Models for Project Management Tool
+model Customer {
+  id             String          @id @default(uuid())
+  name           String
+  vertical       String // cement, chemical, metals, FMCG, etc.
+  sites          Site[]
+  purchaseOrders PurchaseOrder[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model Site {
+  id         String    @id @default(uuid())
+  customerId String
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  name       String
+  code       String
+  poSites    PO_Site[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([customerId, code])
+}
+
+model Module {
+  id            String           @id @default(uuid())
+  name          String           @unique
+  poSiteModules PO_Site_Module[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model PurchaseOrder {
+  id          String    @id @default(uuid())
+  customerId  String
+  customer    Customer  @relation(fields: [customerId], references: [id])
+  orderType   String // Internal/External
+  poNumber    String?
+  soNumber    String?
+  loiNumber   String?
+  issueDate   DateTime
+  expiryDate  DateTime
+  amount      Decimal   @db.Decimal(10, 2)
+  description String    @db.Text
+  poSites     PO_Site[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([customerId, poNumber])
+}
+
+model PO_Site {
+  id            String           @id @default(uuid())
+  poId          String
+  purchaseOrder PurchaseOrder    @relation(fields: [poId], references: [id])
+  siteId        String
+  site          Site             @relation(fields: [siteId], references: [id])
+  poSiteModules PO_Site_Module[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@unique([poId, siteId])
+}
+
+model PO_Site_Module {
+  id             String          @id @default(uuid())
+  poSiteId       String
+  poSite         PO_Site         @relation(fields: [poSiteId], references: [id])
+  moduleId       String
+  module         Module          @relation(fields: [moduleId], references: [id])
+  assignments    Assignment[]
+  projectModules ProjectModule[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@unique([poSiteId, moduleId])
+}
+
+model PMProject {
+  id               String          @id @default(uuid())
+  name             String
+  code             String          @unique
+  projectManagerId String
+  projectManager   User            @relation(fields: [projectManagerId], references: [id])
+  modules          ProjectModule[]
+  metadata         Json?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  projectPlan      ProjectPlan?
+}
+
+model ProjectModule {
+  id             String         @id @default(uuid())
+  projectId      String
+  project        PMProject      @relation(fields: [projectId], references: [id])
+  poSiteModuleId String
+  poSiteModule   PO_Site_Module @relation(fields: [poSiteModuleId], references: [id])
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@unique([projectId, poSiteModuleId])
+}
+
+// Project Plan related models
+model ProjectPlan {
+  id        String     @id @default(uuid())
+  projectId String     @unique
+  project   PMProject  @relation(fields: [projectId], references: [id])
+  tasks     PlanTask[]
+  remarks   Remark[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model PlanTask {
+  id                 String      @id @default(uuid())
+  siNo               Int
+  wbsNo              String
+  taskName           String
+  predecessorIds     String? // Comma-separated SI numbers
+  level              Int         @default(0)
+  goLive             Boolean     @default(false)
+  financialMilestone Boolean     @default(false)
+  startDate          DateTime?
+  endDate            DateTime?
+  duration           Int?
+  actualStartDate    DateTime?
+  actualEndDate      DateTime?
+  actualDuration     Int?
+  progress           Float       @default(0) // Float value representing percentage (0-100)
+  view               String      @default("External") // 'Internal' or 'External'
+  remarks            Remark[]    @relation("TaskRemarks")
+  stageId            String?
+  stage              Stage?      @relation(fields: [stageId], references: [id])
+  productId          String?
+  product            Product?    @relation(fields: [productId], references: [id])
+  isParent           Boolean     @default(false)
+  financialValue     Float? // Financial value of the milestone in currency units
+  plannedEndDate     DateTime? // Original planned end date (for delay calculation)
+  delayDays          Int? // Number of days delayed
+  isDeleted          Boolean     @default(false)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  projectPlanId      String
+  projectPlan        ProjectPlan @relation(fields: [projectPlanId], references: [id])
+
+  @@index([siNo])
+  @@index([projectPlanId])
+}
+
+model Remark {
+  id                String       @id @default(uuid())
+  content           String       @db.Text
+  date              DateTime
+  author            String
+  responseText      String?      @db.Text
+  responseAuthor    String?
+  responseTimestamp DateTime?
+  taskId            String?
+  task              PlanTask?    @relation("TaskRemarks", fields: [taskId], references: [id])
+  projectPlanId     String?
+  projectPlan       ProjectPlan? @relation(fields: [projectPlanId], references: [id])
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+model Stage {
+  id        String     @id @default(uuid())
+  name      String
+  colorCode String
+  tasks     PlanTask[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Product {
+  id        String     @id @default(uuid())
+  name      String
+  tasks     PlanTask[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
